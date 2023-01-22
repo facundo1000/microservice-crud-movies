@@ -57,11 +57,11 @@ public class PojoGenerator {
 
     public static CharacterDetailDto buildCharacterDetail() {
         return CharacterDetailDto.builder()
-                .image("Some image of the character")
-                .name("Chris Cornell")
-                .age(33)
-                .weight(69.45)
-                .story("Audioslave")
+                .image("Image of a Kilo Ren")
+                .name("Kilo Ren")
+                .age(30)
+                .weight(20.33)
+                .story("This is a Story")
                 .movies(Set.of(buildMovieModel()))
                 .build();
     }
