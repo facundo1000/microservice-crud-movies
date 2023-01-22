@@ -13,4 +13,4 @@ This Java microservice uses the folowing dependencies:
 ## FAQ
 **How can i access to H2 Database if needed?**
 
-  ``http://localhost:8080/h2/``
+  ``http://localhost:8080/h2``
