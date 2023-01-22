@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-//TODO: implementar DTO MoviesSeries
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

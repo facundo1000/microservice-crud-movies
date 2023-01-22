@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-//TODO: completar el PojoGenerator
+
 public class PojoGenerator {
     public static MovieSerie buildMovieModel() {
         return MovieSerie.builder()

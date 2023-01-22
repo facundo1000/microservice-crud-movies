@@ -90,7 +90,7 @@ public class MovieSerieImpl implements MovieSerieService {
         repository.deleteById(id);
     }
 
-    //TODO: comprobar la accion de agregar un personaje
+
     @Override
     public MovieSerie addCharacterToMovie(Long idMovie, Long idCharacter) {
 
@@ -107,7 +107,7 @@ public class MovieSerieImpl implements MovieSerieService {
         throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND);
     }
 
-    //TODO: agregar validacion, comprobar metodo
+
     @Override
     public void deleteCharacterFromMovie(Long idMovie, Long idCharacter) {
         Optional<MovieSerie> serieOptional = repository.findById(idMovie);
