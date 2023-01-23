@@ -22,11 +22,11 @@ public interface MovieSerieService {
 
     MovieSerie create(MovieSerie movieSerie);
 
-    MovieSerie addCharacterToMovie(Long idMovie, Long idCharacter);
-
     MovieSerie update(MovieSerie movieSerie, Long id);
 
     void deleteMovieSerie(Long id);
+
+    MovieSerie addCharacterToMovie(Long idMovie, Long idCharacter);
 
     void deleteCharacterFromMovie(Long idMovie, Long idCharacter);
 

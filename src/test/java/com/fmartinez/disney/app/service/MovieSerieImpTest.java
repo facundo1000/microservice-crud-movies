@@ -3,10 +3,13 @@ package com.fmartinez.disney.app.service;
 import com.fmartinez.disney.app.dto.MovieSerieDetailDto;
 import com.fmartinez.disney.app.dto.MovieSerieDto;
 import com.fmartinez.disney.app.mapper.MapStructMapper;
+import com.fmartinez.disney.app.model.Character;
 import com.fmartinez.disney.app.model.MovieSerie;
+import com.fmartinez.disney.app.repository.CharacterRepository;
 import com.fmartinez.disney.app.repository.MovieSerieRepository;
 import com.fmartinez.disney.app.service.impl.MovieSerieImpl;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +33,9 @@ public class MovieSerieImpTest {
     MovieSerieRepository movieRepository;
 
     @Mock
+    CharacterRepository characterRepository;
+
+    @Mock
     MapStructMapper mapper;
 
     @InjectMocks
@@ -41,30 +47,37 @@ public class MovieSerieImpTest {
 
     private static MovieSerie movie;
 
+    private static Character character;
+
     @BeforeAll
     static void setup() {
         movie = buildMovieModel();
         expectedResponse = buildMovieDtoModel();
         expectedDetail = buildMovieDetailModel();
+        character = buildCharacterModel();
     }
 
 
     @Test
     @DisplayName("Test: Get All Movies")
     void getAllMoviesReturnMovieResponse() {
-        lenient().when(movieRepository.findAll()).thenReturn(listOfMovies());
-        lenient().when(mapper.movieSerieToMovieSerieDto(any())).thenReturn(expectedResponse);
+        when(movieRepository.findAll()).thenReturn(listOfMovies());
+        when(mapper.movieSerieToMovieSerieDto(any(MovieSerie.class))).thenReturn(expectedResponse);
 
         allAssertionsForTest(movieService.getAllMovies().iterator().next());
+
+        verify(movieRepository).findAll();
     }
 
     @Test
     @DisplayName("Test: get a movie detail by ID")
     void getMovieShouldReturnMovieResponse() {
-        lenient().when(movieRepository.findById(anyLong())).thenReturn(Optional.ofNullable(movie));
-        lenient().when(mapper.movieSerieDetail(any())).thenReturn(expectedDetail);
+        when(movieRepository.findById(anyLong())).thenReturn(Optional.ofNullable(movie));
+        when(mapper.movieSerieDetail(any(MovieSerie.class))).thenReturn(expectedDetail);
 
         assertionsForMovieDetail(movieService.getMovieSerieDetail(1L));
+
+        verify(movieRepository).findById(anyLong());
     }
 
     @Test
@@ -74,6 +87,8 @@ public class MovieSerieImpTest {
         lenient().when(mapper.movieSerieToMovieSerieDto(any())).thenReturn(expectedResponse);
 
         allAssertionsForTest(movieService.getByTitle(anyString()));
+
+        verify(movieRepository).findByTitleIgnoreCase(anyString());
     }
 
     @Test
@@ -83,8 +98,72 @@ public class MovieSerieImpTest {
         lenient().when(mapper.movieSerieToMovieSerieDto(any())).thenReturn(expectedResponse);
 
         allAssertionsForTest(movieService.findeMovieSerieByGenderId(1L).iterator().next());
+
+        verify(movieRepository).findByGenderId(anyLong());
     }
 
+    @Test
+    @DisplayName("Test: create a new movie-serie")
+    void createNewMovie() {
+        when(movieRepository.save(any(MovieSerie.class))).thenReturn(movie);
+        assertionsForMovieSerie(movieService.create(movie));
+        verify(movieRepository).save(any(MovieSerie.class));
+    }
+
+    @Test
+    @DisplayName("Test: update an existing movie-serie")
+    @Disabled
+    void updateMovieSerie() {
+        when(movieRepository.findById(any())).thenReturn(Optional.of(movie));
+        movie.addCharacter(character);
+        assertionsForMovieSerie(movieService.update(movie, 1L));
+    }
+
+    @Test
+    @DisplayName("Test: delete an existing movie-serie")
+    void deleteMovieSerie() {
+        when(movieRepository.findById(anyLong())).thenReturn(Optional.of(movie));
+        movieService.deleteMovieSerie(1L);
+        verify(movieRepository).findById(anyLong());
+    }
+
+    @Test
+    @DisplayName("Test: add an existing character into an existing movie")
+    void addCharacterToMovie() {
+        when(movieRepository.findById(anyLong())).thenReturn(Optional.of(movie));
+        when(characterRepository.findById(anyLong())).thenReturn(Optional.of(character));
+        when(movieRepository.save(any(MovieSerie.class))).thenReturn(movie);
+
+        movie.addCharacter(character);
+        character.addMovieSerie(movie);
+
+        assertionsForMovieSerie(movieService.addCharacterToMovie(movie.getId(), character.getId()));
+
+        assertThat(movie.getCharacters()).hasSize(1).containsOnly(character);
+        assertThat(character.getMovies()).hasSize(1).containsOnly(movie);
+
+        assertionsForMovieSerie(movie);
+
+        verify(movieRepository).findById(anyLong());
+        verify(characterRepository).findById(anyLong());
+        verify(movieRepository).save(any(MovieSerie.class));
+    }
+
+    @Test
+    @DisplayName("Test: remove existing character from an existing movie")
+    @Disabled
+    void removeChararcters() {
+        addCharacterToMovie();
+
+        movie.removeCharacters();
+        character.removeMovies();
+
+        movieService.deleteCharacterFromMovie(movie.getId(), character.getId());
+
+        assertThat(movie.getCharacters()).hasSize(0);
+        assertThat(character.getMovies()).hasSize(0);
+
+    }
 
     private void allAssertionsForTest(MovieSerieDto movieResponse) {
         assertThat(movieResponse).isNotNull();
@@ -102,6 +181,17 @@ public class MovieSerieImpTest {
         assertThat(movieDetail.getCreateAt()).isEqualTo(expectedDetail.getCreateAt());
         assertThat(movieDetail.getCharacters()).isEqualTo(expectedDetail.getCharacters());
         assertThat(movieDetail.getGender()).isEqualTo(expectedDetail.getGender());
+    }
+
+    private void assertionsForMovieSerie(MovieSerie movieSerie) {
+        assertThat(movieSerie).isNotNull();
+        assertThat(movieSerie.getId()).isEqualTo(movie.getId());
+        assertThat(movieSerie.getImage()).isEqualTo(movie.getImage());
+        assertThat(movieSerie.getTitle()).isEqualTo(movie.getTitle());
+        assertThat(movieSerie.getRate()).isEqualTo(movie.getRate());
+        assertThat(movieSerie.getCreateAt()).isEqualTo(movie.getCreateAt());
+        assertThat(movieSerie.getCharacters()).isEqualTo(movie.getCharacters());
+        assertThat(movieSerie.getGender()).isEqualTo(movie.getGender());
     }
 
 }

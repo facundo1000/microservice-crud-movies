@@ -11,7 +11,6 @@ import com.fmartinez.disney.app.model.MovieSerie;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 public class PojoGenerator {
@@ -35,7 +34,7 @@ public class PojoGenerator {
                 .age(30)
                 .weight(20.33)
                 .story("This is a Story")
-                .movies(Set.of(buildMovieModel()))
+                .movies(new HashSet<>())
                 .build();
     }
 
@@ -44,7 +43,7 @@ public class PojoGenerator {
                 .id(1L)
                 .image("Some genre image")
                 .name("Horror")
-                .movies(Set.of(buildMovieModel()))
+                .movies(new HashSet<>())
                 .build();
     }
 
@@ -62,7 +61,7 @@ public class PojoGenerator {
                 .age(30)
                 .weight(20.33)
                 .story("This is a Story")
-                .movies(Set.of(buildMovieModel()))
+                .movies(new HashSet<>())
                 .build();
     }
 

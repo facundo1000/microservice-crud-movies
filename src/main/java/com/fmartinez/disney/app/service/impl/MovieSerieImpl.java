@@ -100,7 +100,6 @@ public class MovieSerieImpl implements MovieSerieService {
         if (serieOptional.isPresent() && characterOptional.isPresent()) {
             serieOptional.get().addCharacter(characterOptional.get());
             characterOptional.get().addMovieSerie(serieOptional.get());
-            serieOptional.map(mapper::movieSerieDetail); //ver si esto funciona
             return repository.save(serieOptional.get());
         }
 
@@ -116,10 +115,8 @@ public class MovieSerieImpl implements MovieSerieService {
         if (serieOptional.isPresent() && characterOptional.isPresent()) {
             serieOptional.get().removeCharacter(characterOptional.get());
             characterOptional.get().removeMovie(serieOptional.get());
-            serieOptional.map(mapper::movieSerieDetail); //ver si esto funciona
             repository.save(serieOptional.get());
         }
-
         throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND);
     }
 
