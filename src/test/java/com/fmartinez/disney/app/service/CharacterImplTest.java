@@ -8,7 +8,6 @@ import com.fmartinez.disney.app.model.MovieSerie;
 import com.fmartinez.disney.app.repository.CharacterRepository;
 import com.fmartinez.disney.app.service.impl.CharacterServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +22,8 @@ import java.util.Set;
 import static com.fmartinez.disney.app.util.PojoGenerator.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CharacterImplTest {
@@ -61,24 +61,33 @@ public class CharacterImplTest {
         when(mapper.characterToCharacterDto(character)).thenReturn(characterDto);
 
         allAssertionsForTestDto(service.getAllCharacters().iterator().next());
+
+        verify(repository).findAll();
+        verify(mapper).characterToCharacterDto(any(Character.class));
     }
 
     @Test
     @DisplayName("Test: get character by id")
     void getCharacterByIdReturnResponse() {
-        when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(character));
-        when(mapper.characterToCharacterDetail(any())).thenReturn(characterDetail);
+        when(repository.findById(anyLong())).thenReturn(Optional.of(character));
+        when(mapper.characterToCharacterDetail(any(Character.class))).thenReturn(characterDetail);
 
         allAssertionsForTestsDetail(service.getCharacterById(1L));
+
+        verify(repository).findById(anyLong());
+        verify(mapper).characterToCharacterDetail(any(Character.class));
     }
 
     @Test
     @DisplayName("Test: get character by name")
     void getCharacterByNameReturnResponse() {
-        when(repository.findByNameIgnoreCase(anyString())).thenReturn(Optional.ofNullable(character));
+        when(repository.findByNameIgnoreCase(anyString())).thenReturn(Optional.of(character));
         when(mapper.characterToCharacterDto(any())).thenReturn(characterDto);
 
         allAssertionsForTestDto(service.getCharacterByName("Chris Evans"));
+
+        verify(repository).findByNameIgnoreCase(anyString());
+        verify(mapper).characterToCharacterDto(any(Character.class));
     }
 
     @Test
@@ -88,6 +97,9 @@ public class CharacterImplTest {
         when(mapper.characterToCharacterDto(any())).thenReturn(characterDto);
 
         allAssertionsForTestDto(service.getCharactersByAge(23).iterator().next());
+
+        verify(repository).findByAge(anyInt());
+        verify(mapper).characterToCharacterDto(any(Character.class));
     }
 
     @Test
@@ -95,7 +107,11 @@ public class CharacterImplTest {
     void getCharacterByMovieId() {
         when(repository.findCharacterByMoviesId(anyLong())).thenReturn(Optional.of(Set.of(character)));
         when(mapper.characterToCharacterDto(any())).thenReturn(characterDto);
+
         allAssertionsForTestDto(service.getCharacterByMovieId(1L).iterator().next());
+
+        verify(repository).findCharacterByMoviesId(anyLong());
+        verify(mapper).characterToCharacterDto(any(Character.class));
     }
 
     @Test
@@ -114,23 +130,30 @@ public class CharacterImplTest {
     void createCharacter() {
         when(repository.save(any(Character.class))).thenReturn(character);
         allAssertionsForTestCharacter(service.create(character));
+
+        verify(repository).save(any(Character.class));
     }
 
     @Test
     @DisplayName("Test: update an existing character")
-    @Disabled
     void updateCharacter() {
-        lenient().when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(character));
+        when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(character));
+        when(repository.save(any(Character.class))).thenReturn(character);
         character.addMovieSerie(movie);
         allAssertionsForTestCharacter(service.update(character, 1L));
+
+        verify(repository).findById(anyLong());
+        verify(repository).save(any(Character.class));
     }
 
     @Test
     @DisplayName("Test: delete an existing character")
     void deleteCharacter() {
-       lenient().when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(character));
-       character.removeMovies();
-       service.deleteCharcter(1L);
+        when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(character));
+        character.removeMovies();
+        service.deleteCharcter(1L);
+
+        verify(repository).findById(anyLong());
     }
 
     private void allAssertionsForTestDto(CharacterDto characterDto) {

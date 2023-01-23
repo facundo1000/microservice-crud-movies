@@ -44,7 +44,7 @@ public class Character implements Serializable {
             cascade = {CascadeType.MERGE, CascadeType.PERSIST},
             fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<MovieSerie> movies;
+    private Set<MovieSerie> movies = new HashSet<>();
 
     public void addMovieSerie(MovieSerie movie) {
         this.movies.add(movie);

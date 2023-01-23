@@ -80,20 +80,22 @@ public class CharacterServiceImpl implements CharacterService {
     @Override
     public Character update(Character character, Long id) {
         if (id > 0) {
+
             Optional<Character> characterNew = repository.findById(id);
+
             if (characterNew.isPresent()) {
+
                 characterNew.get().setImage(character.getImage());
                 characterNew.get().setName(character.getName());
                 characterNew.get().setAge(character.getAge());
                 characterNew.get().setWeight(character.getWeight());
                 characterNew.get().setStory(character.getStory());
-                characterNew.get().addMovieSerie(character.getMovies().iterator().next());
+                characterNew.get().setMovies(character.getMovies());
+
                 return repository.save(characterNew.get());
             }
-        } else {
-            throw new NotFoundException(ErrorType.CHARACTER_NOT_FOUND);
         }
-        return repository.save(character);
+        throw new NotFoundException(ErrorType.CHARACTER_NOT_FOUND);
     }
 
     @Override

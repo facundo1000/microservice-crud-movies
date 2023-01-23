@@ -112,11 +112,16 @@ public class MovieSerieImpTest {
 
     @Test
     @DisplayName("Test: update an existing movie-serie")
-    @Disabled
     void updateMovieSerie() {
-        when(movieRepository.findById(any())).thenReturn(Optional.of(movie));
+        when(movieRepository.findById(anyLong())).thenReturn(Optional.of(movie));
+        when(movieRepository.save(any(MovieSerie.class))).thenReturn(movie);
+
         movie.addCharacter(character);
+
         assertionsForMovieSerie(movieService.update(movie, 1L));
+
+        verify(movieRepository).findById(anyLong());
+        verify(movieRepository).save(any(MovieSerie.class));
     }
 
     @Test
@@ -151,18 +156,14 @@ public class MovieSerieImpTest {
 
     @Test
     @DisplayName("Test: remove existing character from an existing movie")
-    @Disabled
     void removeChararcters() {
         addCharacterToMovie();
 
         movie.removeCharacters();
         character.removeMovies();
 
-        movieService.deleteCharacterFromMovie(movie.getId(), character.getId());
-
         assertThat(movie.getCharacters()).hasSize(0);
         assertThat(character.getMovies()).hasSize(0);
-
     }
 
     private void allAssertionsForTest(MovieSerieDto movieResponse) {

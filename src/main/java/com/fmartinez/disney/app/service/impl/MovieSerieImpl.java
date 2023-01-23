@@ -62,6 +62,7 @@ public class MovieSerieImpl implements MovieSerieService {
         return repository.save(movieSerie);
     }
 
+    //TODO: arreglar
     @Override
     public MovieSerie update(MovieSerie movieSerie, Long id) {
         if (id > 0) {
@@ -72,14 +73,13 @@ public class MovieSerieImpl implements MovieSerieService {
                 actual.get().setTitle(movieSerie.getTitle());
                 actual.get().setCreateAt(movieSerie.getCreateAt());
                 actual.get().setRate(movieSerie.getRate());
-                actual.get().addCharacter(movieSerie.getCharacters().iterator().next());
+                actual.get().setCharacters(movieSerie.getCharacters());
                 actual.get().setGender(movieSerie.getGender());
+
                 return repository.save(actual.get());
             }
-        } else {
-            throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND);
         }
-        return repository.save(movieSerie);
+        throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND);
     }
 
     @Override
@@ -109,6 +109,7 @@ public class MovieSerieImpl implements MovieSerieService {
 
     @Override
     public void deleteCharacterFromMovie(Long idMovie, Long idCharacter) {
+
         Optional<MovieSerie> serieOptional = repository.findById(idMovie);
         Optional<Character> characterOptional = characterRepository.findById(idCharacter);
 
@@ -119,6 +120,5 @@ public class MovieSerieImpl implements MovieSerieService {
         }
         throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND);
     }
-
 
 }

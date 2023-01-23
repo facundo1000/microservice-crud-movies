@@ -37,7 +37,7 @@ public class MovieSerie implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "CHARACTER_id"),
             uniqueConstraints = @UniqueConstraint(columnNames = {"MOVIE_SERIE_id", "CHARACTER_id"}))
     @JsonIgnore
-    private Set<Character> characters;
+    private Set<Character> characters = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "gender_id")
