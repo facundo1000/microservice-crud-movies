@@ -3,6 +3,7 @@ package com.fmartinez.disney.app.service;
 import com.fmartinez.disney.app.dto.MovieSerieDetailDto;
 import com.fmartinez.disney.app.dto.MovieSerieDto;
 import com.fmartinez.disney.app.model.MovieSerie;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ public interface MovieSerieService {
 
     Set<MovieSerieDto> findeMovieSerieByGenderId(Long id);
 
-    //List<MovieSerieDto> movieSerieByCreateAtOrderBy(Date date, Sort sort);
+    List<MovieSerieDto> movieSerieOrderByDate(String sort);
 
     MovieSerie create(MovieSerie movieSerie);
 

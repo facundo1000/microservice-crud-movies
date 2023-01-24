@@ -3,6 +3,12 @@ package com.fmartinez.disney.app.controller;
 import com.fmartinez.disney.app.dto.CharacterDetailDto;
 import com.fmartinez.disney.app.dto.CharacterDto;
 import com.fmartinez.disney.app.model.Character;
+import com.fmartinez.disney.app.swagger.find.ResponseFindCharacter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +21,7 @@ import static com.fmartinez.disney.app.constant.ApplicationConstant.CHARACTER_PA
 public interface CharacterController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
+    @ResponseFindCharacter
     List<CharacterDto> getAllCharacters();
 
     @ResponseStatus(HttpStatus.FOUND)

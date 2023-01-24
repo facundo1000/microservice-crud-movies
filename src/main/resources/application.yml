@@ -27,10 +27,10 @@ spring:
 
 springdoc:
   swagger-ui:
-    path: /openapi/swagger-ui.html
+    path: /openapi/ui
     enabled: true
   api-docs:
-    path: /openapi/api-docs
+    path: /openapi/docs
     enabled: true
 
 logging:

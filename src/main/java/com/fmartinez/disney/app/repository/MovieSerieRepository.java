@@ -11,5 +11,4 @@ public interface MovieSerieRepository extends JpaRepository<MovieSerie, Long> {
 
     Optional<Set<MovieSerie>> findByGenderId(Long id);
 
-//    Optional<List<MovieSerie>> findMovieSerieByCreateAtOrderByCreateAt(Date date, Sort sort);
 }

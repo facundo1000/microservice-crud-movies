@@ -9,13 +9,13 @@ import com.fmartinez.disney.app.repository.CharacterRepository;
 import com.fmartinez.disney.app.repository.MovieSerieRepository;
 import com.fmartinez.disney.app.service.impl.MovieSerieImpl;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 
 import java.util.Optional;
 import java.util.Set;
@@ -83,8 +83,8 @@ public class MovieSerieImpTest {
     @Test
     @DisplayName("Test: get a movie by name")
     void getMovieByTitle() {
-        lenient().when(movieRepository.findByTitleIgnoreCase(anyString())).thenReturn(Optional.ofNullable(movie));
-        lenient().when(mapper.movieSerieToMovieSerieDto(any())).thenReturn(expectedResponse);
+        when(movieRepository.findByTitleIgnoreCase(anyString())).thenReturn(Optional.ofNullable(movie));
+        when(mapper.movieSerieToMovieSerieDto(any())).thenReturn(expectedResponse);
 
         allAssertionsForTest(movieService.getByTitle(anyString()));
 
@@ -94,12 +94,26 @@ public class MovieSerieImpTest {
     @Test
     @DisplayName("Test: get a movie by gender id")
     void getMovieByGenderId() {
-        lenient().when(movieRepository.findByGenderId(anyLong())).thenReturn(Optional.of(Set.of(buildMovieModel())));
-        lenient().when(mapper.movieSerieToMovieSerieDto(any())).thenReturn(expectedResponse);
+        when(movieRepository.findByGenderId(anyLong())).thenReturn(Optional.of(Set.of(movie)));
+        when(mapper.movieSerieToMovieSerieDto(any())).thenReturn(expectedResponse);
 
         allAssertionsForTest(movieService.findeMovieSerieByGenderId(1L).iterator().next());
 
         verify(movieRepository).findByGenderId(anyLong());
+    }
+
+    @Test
+    @DisplayName("Test: get all movies order by date")
+    void getAllMoviesOrderByDate() {
+        when(movieRepository.findAll(Sort.by("createAt").descending())).thenReturn(listOfMovies());
+        when(movieRepository.findAll(Sort.by("createAt").ascending())).thenReturn(listOfMovies());
+        when(mapper.movieSerieToMovieSerieDto(any(MovieSerie.class))).thenReturn(expectedResponse);
+
+        assertThat(expectedResponse).isEqualTo(movieService.movieSerieOrderByDate("asc").iterator().next());
+        assertThat(expectedResponse).isEqualTo(movieService.movieSerieOrderByDate("desc").iterator().next());
+
+        verify(movieRepository).findAll(Sort.by("createAt").ascending());
+        verify(movieRepository).findAll(Sort.by("createAt").descending());
     }
 
     @Test

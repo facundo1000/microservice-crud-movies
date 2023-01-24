@@ -23,6 +23,10 @@ public interface MovieController {
 
     @GetMapping(params = "genre")
     ResponseEntity<?> getMovieByGenderId(@RequestParam("genre") Long idGenero);
+
+    @GetMapping(params = "order")
+    ResponseEntity<?> getMovieOrderByCreateAt(@RequestParam("order") String sort);
+
     @PostMapping
     ResponseEntity<?> createMovie(@RequestBody MovieSerie movieSerie);
 
@@ -36,10 +40,7 @@ public interface MovieController {
     ResponseEntity<?> addCharacterToMovie(@PathVariable Long idMovie, @PathVariable Long idCharacter);
 
     @DeleteMapping("/{idMovie}/characters/{idCharacter}")
-    ResponseEntity<Void>deleteCharacterFromMovie(@PathVariable Long idMovie, @PathVariable Long idCharacter);
+    ResponseEntity<Void> deleteCharacterFromMovie(@PathVariable Long idMovie, @PathVariable Long idCharacter);
 
-/*
-    @GetMapping(params = "order")
-    ResponseEntity<?> getMovieOrderByCreateAt(Date date, Sort sort);
- */
+
 }

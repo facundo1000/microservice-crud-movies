@@ -11,6 +11,7 @@ import com.fmartinez.disney.app.repository.MovieSerieRepository;
 import com.fmartinez.disney.app.service.MovieSerieService;
 import com.fmartinez.disney.app.util.ErrorType;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,6 +59,36 @@ public class MovieSerieImpl implements MovieSerieService {
     }
 
     @Override
+    public List<MovieSerieDto> movieSerieOrderByDate(String sort) {
+        List<MovieSerieDto> dtoList;
+
+        if (sort != null && !sort.startsWith(" ")) {
+            dtoList = switch (sort) {
+
+                case "ASC", "asc" -> repository
+                        .findAll(Sort.by("createAt").ascending())
+                        .stream()
+                        .map(mapper::movieSerieToMovieSerieDto)
+                        .toList();
+
+                case "DESC", "desc" -> repository
+                        .findAll(Sort.by("createAt").descending())
+                        .stream()
+                        .map(mapper::movieSerieToMovieSerieDto)
+                        .toList();
+
+                default -> repository
+                        .findAll(Sort.by("createAt").descending())
+                        .stream()
+                        .map(mapper::movieSerieToMovieSerieDto)
+                        .toList();
+            };
+            return dtoList;
+        }
+        throw new NotFoundException(ErrorType.NOT_FOUND_EXCEPTION, "String 'DESC' or 'ASC not found'");
+    }
+
+    @Override
     public MovieSerie create(MovieSerie movieSerie) {
         return repository.save(movieSerie);
     }
@@ -65,15 +96,19 @@ public class MovieSerieImpl implements MovieSerieService {
     //TODO: arreglar
     @Override
     public MovieSerie update(MovieSerie movieSerie, Long id) {
+
         if (id > 0) {
             Optional<MovieSerie> actual = repository.findById(id);
+
             if (actual.isPresent()) {
+
+                Set<Character> characterSet = actual.get().getCharacters();
 
                 actual.get().setImage(movieSerie.getImage());
                 actual.get().setTitle(movieSerie.getTitle());
                 actual.get().setCreateAt(movieSerie.getCreateAt());
                 actual.get().setRate(movieSerie.getRate());
-                actual.get().setCharacters(movieSerie.getCharacters());
+                actual.get().setCharacters(characterSet);
                 actual.get().setGender(movieSerie.getGender());
 
                 return repository.save(actual.get());
@@ -106,7 +141,6 @@ public class MovieSerieImpl implements MovieSerieService {
         throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND);
     }
 
-
     @Override
     public void deleteCharacterFromMovie(Long idMovie, Long idCharacter) {
 
@@ -114,11 +148,14 @@ public class MovieSerieImpl implements MovieSerieService {
         Optional<Character> characterOptional = characterRepository.findById(idCharacter);
 
         if (serieOptional.isPresent() && characterOptional.isPresent()) {
+
             serieOptional.get().removeCharacter(characterOptional.get());
             characterOptional.get().removeMovie(serieOptional.get());
+
             repository.save(serieOptional.get());
+        } else {
+            throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND);
         }
-        throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND);
     }
 
 }

@@ -45,6 +45,12 @@ public class MovieSerieControllerImpl implements MovieController {
     }
 
     @Override
+    public ResponseEntity<?> getMovieOrderByCreateAt(String sort) {
+        List<MovieSerieDto> dtoList = service.movieSerieOrderByDate(sort);
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<?> createMovie(MovieSerie movieSerie) {
         MovieSerie movie = service.create(movieSerie);
         return new ResponseEntity<>(movie, HttpStatus.CREATED);
