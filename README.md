@@ -14,3 +14,7 @@ This Java microservice uses the folowing dependencies:
 **How can i access to H2 Database if needed?**
 
   ``http://localhost:8080/h2``
+  
+  **How can i access to Swagger Docs?**
+  
+  ``http://localhost:8080/openapi/ui``
