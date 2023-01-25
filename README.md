@@ -4,7 +4,6 @@ Microservice for the managment of characters, movies and genres. For Java Spring
 ## What's included
 This Java microservice uses the folowing dependencies:
 - H2 database 
-- Spring Security with JWT (not implemented)
 - MapStruct
 - Junit5 / Mokito
 - Springboot Validation
