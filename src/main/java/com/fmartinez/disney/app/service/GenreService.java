@@ -8,4 +8,8 @@ public interface GenreService {
     List<Genre> getAllGenre();
 
     Genre create(Genre genre);
+
+    Genre update(Genre genre, Long id);
+
+    void delete(Long id);
 }

@@ -40,7 +40,7 @@ public class MovieSerie implements Serializable {
     @JsonIgnore
     private Set<Character> characters = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "gender_id")
     @JsonIgnore
     private Genre gender;

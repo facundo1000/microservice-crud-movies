@@ -5,10 +5,9 @@ import com.fmartinez.disney.app.swagger.find.genre.ResponseFindGenre;
 import com.fmartinez.disney.app.swagger.save.genre.ResponseSaveGenre;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.fmartinez.disney.app.constant.ApplicationConstant.GENRE_PATH;
 
@@ -18,9 +17,16 @@ public interface GenreController {
 
     @GetMapping
     @ResponseFindGenre
-    ResponseEntity<?> getAllGenres();
+    ResponseEntity<List<Genre>> getAllGenres();
 
     @PostMapping("/create")
     @ResponseSaveGenre
-    ResponseEntity<?> create(@RequestBody Genre genre);
+    ResponseEntity<Genre> create(@RequestBody Genre genre);
+
+    @PutMapping("/update/{id}")
+    ResponseEntity<Genre> update(@RequestBody Genre genre, @PathVariable Long id);
+
+    @DeleteMapping("/delete/{id}")
+    ResponseEntity<Void> delete(@PathVariable Long id);
+
 }

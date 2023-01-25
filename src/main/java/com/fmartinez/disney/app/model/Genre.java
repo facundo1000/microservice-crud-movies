@@ -26,9 +26,20 @@ public class Genre implements Serializable {
     private String name;
     private String image;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gender")
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "gender")
     @JsonIgnore
     private Set<MovieSerie> movies;
+
+    public void removeMovie(MovieSerie movie) {
+        this.movies.remove(movie);
+        movie.setGender(null);
+    }
+
+    public void removesMovies() {
+        for (MovieSerie m : new HashSet<>(movies)) {
+            removeMovie(m);
+        }
+    }
 
     @Serial
     private static final long serialVersionUID = -2202074855826539188L;

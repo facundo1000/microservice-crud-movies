@@ -1,6 +1,5 @@
 package com.fmartinez.disney.app.swagger.delete;
 
-import com.fmartinez.disney.app.dto.CharacterDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

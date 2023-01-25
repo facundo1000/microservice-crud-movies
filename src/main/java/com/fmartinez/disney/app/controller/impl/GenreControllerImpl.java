@@ -5,6 +5,7 @@ import com.fmartinez.disney.app.model.Genre;
 import com.fmartinez.disney.app.service.GenreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,5 +30,19 @@ public class GenreControllerImpl implements GenreController {
     public ResponseEntity<Genre> create(@RequestBody Genre genre) {
         Genre genreNuevo = service.create(genre);
         return new ResponseEntity<>(genreNuevo, HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<Genre> update(@RequestBody Genre genre, @PathVariable Long id) {
+
+        Genre genreOne = service.update(genre, id);
+
+        return new ResponseEntity<>(genreOne, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> delete(Long id) {
+        service.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
