@@ -14,7 +14,7 @@ public interface CharacterService {
 
     CharacterDto getCharacterByName(String name);
 
-    List<CharacterDto> getCharactersByAge(Integer age);
+    Set<CharacterDto> getCharactersByAge(Integer age);
 
     Set<CharacterDto> getCharacterByMovieId(Long id);
 

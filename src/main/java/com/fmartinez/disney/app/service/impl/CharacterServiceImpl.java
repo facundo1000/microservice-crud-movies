@@ -48,11 +48,11 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     @Override
-    public List<CharacterDto> getCharactersByAge(Integer age) {
+    public Set<CharacterDto> getCharactersByAge(Integer age) {
         return repository.findByAge(age)
                 .orElseThrow(() -> new NotFoundException(ErrorType.CHARACTER_NOT_FOUND))
                 .stream().map(mapper::characterToCharacterDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @Override

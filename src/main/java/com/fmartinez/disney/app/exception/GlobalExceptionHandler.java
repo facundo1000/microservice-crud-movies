@@ -31,6 +31,7 @@ public class GlobalExceptionHandler {
                     .code("MOVIE_SERIE_NOT_FOUND")
                     .message(MOVIE_SERIE_NOT_FOUND + getAdditionalInfo(exception))
                     .build();
+            case NOT_FOUND_EXCEPTION -> null;
         };
     }
 

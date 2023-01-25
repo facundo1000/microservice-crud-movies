@@ -1,45 +1,65 @@
 package com.fmartinez.disney.app.controller;
 
 import com.fmartinez.disney.app.dto.MovieSerieDetailDto;
+import com.fmartinez.disney.app.dto.MovieSerieDto;
 import com.fmartinez.disney.app.model.MovieSerie;
-import org.springframework.http.HttpStatus;
+import com.fmartinez.disney.app.swagger.delete.ResponseDeleteMovieSerie;
+import com.fmartinez.disney.app.swagger.delete.ResponseDeleteMovieSerieCharacter;
+import com.fmartinez.disney.app.swagger.find.movie.*;
+import com.fmartinez.disney.app.swagger.save.movie.ResponseSaveMovieSerie;
+import com.fmartinez.disney.app.swagger.save.movie.ResponseSaveMovieSerieCharcter;
+import com.fmartinez.disney.app.swagger.save.movie.ResponseUpdateMovieSerie;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Set;
+
 import static com.fmartinez.disney.app.constant.ApplicationConstant.MOVIE_SERIE_PATH;
 
+@Tag(name = "Movie-Serie Controller", description = "movie-serie client side operations")
 @RequestMapping(MOVIE_SERIE_PATH)
 public interface MovieController {
 
     @GetMapping
-    ResponseEntity<?> getAllMovies();
+    @ResponseFindMovieSerie
+    ResponseEntity<List<MovieSerieDto>> getAllMovies();
 
-    @ResponseStatus(HttpStatus.FOUND)
-    @GetMapping(params = "id")
-    MovieSerieDetailDto getMovieDetail(@RequestParam Long id);
+    @GetMapping("/details/{id}")
+    @ResponseFindMovieSerieDetails
+    ResponseEntity<MovieSerieDetailDto> getMovieDetail(@PathVariable Long id);
 
-    @GetMapping(params = "name")
-    ResponseEntity<?> getMovieByName(@RequestParam String name);
+    @GetMapping("/name/{name}")
+    @ResponseFindMovieSerieByName
+    ResponseEntity<MovieSerieDto> getMovieByName(@RequestParam String name);
 
-    @GetMapping(params = "genre")
-    ResponseEntity<?> getMovieByGenderId(@RequestParam("genre") Long idGenero);
+    @GetMapping("/genre/{idGenero}")
+    @ResponseFindMovieSerieByGenre
+    ResponseEntity<Set<MovieSerieDto>> getMovieByGenderId(@PathVariable Long idGenero);
 
-    @GetMapping(params = "order")
-    ResponseEntity<?> getMovieOrderByCreateAt(@RequestParam("order") String sort);
+    @GetMapping("/sort/{sort}")
+    @ResponseFindMovieSerieSort
+    ResponseEntity<List<MovieSerieDto>> getMovieOrderByCreateAt(@PathVariable String sort);
 
-    @PostMapping
-    ResponseEntity<?> createMovie(@RequestBody MovieSerie movieSerie);
+    @PostMapping("/create")
+    @ResponseSaveMovieSerie
+    ResponseEntity<MovieSerie> createMovie(@RequestBody MovieSerie movieSerie);
 
-    @PutMapping(params = "id")
-    ResponseEntity<?> updateMovie(@RequestBody MovieSerie movieSerie, @RequestParam Long id);
+    @PutMapping("/update/{id}")
+    @ResponseUpdateMovieSerie
+    ResponseEntity<MovieSerie> updateMovie(@RequestBody MovieSerie movieSerie, @PathVariable Long id);
 
-    @DeleteMapping(params = "id")
-    ResponseEntity<Void> deleteMovie(@RequestParam Long id);
+    @DeleteMapping("/delete/{id}")
+    @ResponseDeleteMovieSerie
+    ResponseEntity<Void> deleteMovie(@PathVariable Long id);
 
     @PostMapping("/{idMovie}/characters/{idCharacter}")
-    ResponseEntity<?> addCharacterToMovie(@PathVariable Long idMovie, @PathVariable Long idCharacter);
+    @ResponseSaveMovieSerieCharcter
+    ResponseEntity<MovieSerie> addCharacterToMovie(@PathVariable Long idMovie, @PathVariable Long idCharacter);
 
     @DeleteMapping("/{idMovie}/characters/{idCharacter}")
+    @ResponseDeleteMovieSerieCharacter
     ResponseEntity<Void> deleteCharacterFromMovie(@PathVariable Long idMovie, @PathVariable Long idCharacter);
 
 

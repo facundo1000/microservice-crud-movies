@@ -29,6 +29,7 @@ springdoc:
   swagger-ui:
     path: /openapi/ui
     enabled: true
+    operations-sorter: method
   api-docs:
     path: /openapi/docs
     enabled: true

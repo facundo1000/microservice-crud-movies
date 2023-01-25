@@ -78,6 +78,7 @@ public class MovieSerieImpTest {
         assertionsForMovieDetail(movieService.getMovieSerieDetail(1L));
 
         verify(movieRepository).findById(anyLong());
+        verify(mapper).movieSerieDetail(any(MovieSerie.class));
     }
 
     @Test

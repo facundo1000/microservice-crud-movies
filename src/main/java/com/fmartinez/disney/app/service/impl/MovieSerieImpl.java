@@ -37,8 +37,7 @@ public class MovieSerieImpl implements MovieSerieService {
     @Override
     public MovieSerieDetailDto getMovieSerieDetail(Long id) {
         return repository
-                .findById(id)
-                .map(mapper::movieSerieDetail)
+                .findById(id).map(mapper::movieSerieDetail)
                 .orElseThrow(() -> new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND));
     }
 

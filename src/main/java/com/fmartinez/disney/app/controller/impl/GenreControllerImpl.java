@@ -5,6 +5,7 @@ import com.fmartinez.disney.app.model.Genre;
 import com.fmartinez.disney.app.service.GenreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,13 +20,13 @@ public class GenreControllerImpl implements GenreController {
     }
 
     @Override
-    public ResponseEntity<?> getAllGenres() {
+    public ResponseEntity<List<Genre>> getAllGenres() {
         List<Genre> genreSet = service.getAllGenre();
         return new ResponseEntity<>(genreSet, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> create(Genre genre) {
+    public ResponseEntity<Genre> create(@RequestBody Genre genre) {
         Genre genreNuevo = service.create(genre);
         return new ResponseEntity<>(genreNuevo, HttpStatus.CREATED);
     }

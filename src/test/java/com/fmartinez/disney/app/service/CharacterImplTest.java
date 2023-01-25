@@ -69,7 +69,7 @@ public class CharacterImplTest {
     @Test
     @DisplayName("Test: get character by id")
     void getCharacterByIdReturnResponse() {
-        when(repository.findById(anyLong())).thenReturn(Optional.of(character));
+        when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(character));
         when(mapper.characterToCharacterDetail(any(Character.class))).thenReturn(characterDetail);
 
         allAssertionsForTestsDetail(service.getCharacterById(1L));

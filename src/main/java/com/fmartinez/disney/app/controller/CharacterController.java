@@ -3,13 +3,11 @@ package com.fmartinez.disney.app.controller;
 import com.fmartinez.disney.app.dto.CharacterDetailDto;
 import com.fmartinez.disney.app.dto.CharacterDto;
 import com.fmartinez.disney.app.model.Character;
-import com.fmartinez.disney.app.swagger.find.ResponseFindCharacter;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.http.HttpStatus;
+import com.fmartinez.disney.app.swagger.delete.ResponseDeleteCharacter;
+import com.fmartinez.disney.app.swagger.find.character.*;
+import com.fmartinez.disney.app.swagger.save.character.ResponseSaveCharacter;
+import com.fmartinez.disney.app.swagger.save.character.ResponseUpdateCharacter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,35 +15,43 @@ import java.util.List;
 
 import static com.fmartinez.disney.app.constant.ApplicationConstant.CHARACTER_PATH;
 
+@Tag(name = "Character Controller", description = "Character side operations")
 @RequestMapping(CHARACTER_PATH)
 public interface CharacterController {
-    @ResponseStatus(HttpStatus.OK)
+
     @GetMapping
     @ResponseFindCharacter
-    List<CharacterDto> getAllCharacters();
+    ResponseEntity<List<CharacterDto>> getAllCharacters();
 
-    @ResponseStatus(HttpStatus.FOUND)
-    @GetMapping(params = "id")
-    CharacterDetailDto getCharacterById(@RequestParam Long id);
+    @GetMapping(value = "/details/{id}")
+    @ResponseFindCharacterDetails
+    ResponseEntity<CharacterDetailDto> getCharacterById(@PathVariable Long id);
 
-    @GetMapping(params = "name")
-    ResponseEntity<?> getCharacterByName(@RequestParam String name);
+    @GetMapping("/name/{name}")
+    @ResponseFindCharacterByName
+    ResponseEntity<?> getCharacterByName(@PathVariable String name);
 
-    @GetMapping(params = "age")
-    ResponseEntity<?> getCharactersByAge(@RequestParam Integer age);
+    @GetMapping("/age/{age}")
+    @ResponseFindCharacterByAge
+    ResponseEntity<?> getCharactersByAge(@PathVariable Integer age);
 
-    @GetMapping(params = "movies")
-    ResponseEntity<?> getCharacterByMovieId(@RequestParam Long movies);
+    @GetMapping("/idmovie/{id}")
+    @ResponseFindCharacterMovieId
+    ResponseEntity<?> getCharacterByMovieId(@PathVariable Long id);
 
-    @GetMapping(params = "weight")
-    ResponseEntity<?> getCharacterByWeight(@RequestParam Double weight);
+    @GetMapping("/weight/{weight}")
+    @ResponseFindCharacterByWeight
+    ResponseEntity<?> getCharacterByWeight(@PathVariable Double weight);
 
     @PostMapping
+    @ResponseSaveCharacter
     ResponseEntity<?> create(@RequestBody Character character);
 
-    @PutMapping(params = "id")
-    ResponseEntity<Character> update(@RequestBody Character character, @RequestParam Long id);
+    @PutMapping("/update/{id}")
+    @ResponseUpdateCharacter
+    ResponseEntity<Character> update(@RequestBody Character character, @PathVariable Long id);
 
-    @DeleteMapping(params = "id")
-    ResponseEntity<Void> delete(@RequestParam Long id);
+    @DeleteMapping("/delete/{id}")
+    @ResponseDeleteCharacter
+    ResponseEntity<Void> delete(@PathVariable Long id);
 }
