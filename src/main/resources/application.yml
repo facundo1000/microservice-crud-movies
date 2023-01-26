@@ -20,11 +20,6 @@ spring:
     defer-datasource-initialization: true
     database-platform: org.hibernate.dialect.H2Dialect
 
-# son 10 minutos
-#application:
-#  auth:
-#    token-expiry: 600000
-
 springdoc:
   swagger-ui:
     path: /openapi/ui

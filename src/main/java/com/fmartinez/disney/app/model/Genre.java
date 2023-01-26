@@ -30,6 +30,11 @@ public class Genre implements Serializable {
     @JsonIgnore
     private Set<MovieSerie> movies;
 
+    public void addMovieSerie(MovieSerie movie) {
+        this.movies.add(movie);
+        movie.setGender(this);
+    }
+
     public void removeMovie(MovieSerie movie) {
         this.movies.remove(movie);
         movie.setGender(null);

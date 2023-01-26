@@ -2,22 +2,23 @@ package com.fmartinez.disney.app.service.impl;
 
 import com.fmartinez.disney.app.exception.NotFoundException;
 import com.fmartinez.disney.app.model.Genre;
+import com.fmartinez.disney.app.model.MovieSerie;
 import com.fmartinez.disney.app.repository.GenreRepository;
+import com.fmartinez.disney.app.repository.MovieSerieRepository;
 import com.fmartinez.disney.app.service.GenreService;
 import com.fmartinez.disney.app.util.ErrorType;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository repository;
-
-    public GenreServiceImpl(final GenreRepository repository) {
-        this.repository = repository;
-    }
+    private final MovieSerieRepository movieRepo;
 
     @Override
     public List<Genre> getAllGenre() {
@@ -56,5 +57,40 @@ public class GenreServiceImpl implements GenreService {
                 .removesMovies();
         repository.deleteById(id);
 
+    }
+
+    @Override
+    public Genre addGenreToMovie(Long idGenre, Long idMovie) {
+
+        Optional<MovieSerie> movie = movieRepo.findById(idMovie);
+        Optional<Genre> genre = repository.findById(idGenre);
+
+        if (genre.isPresent()) {
+            if (movie.isPresent()) {
+                movie.get().setGender(genre.get());
+                genre.get().addMovieSerie(movie.get());
+                return repository.save(genre.get());
+            }
+            throw new NotFoundException(ErrorType.GENRE_NOT_FOUND, "genre not found");
+        }
+        throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND, "movie not present");
+
+    }
+
+    @Override
+    public void removeGenreToMovie(Long idGenre, Long idMovie) {
+        Optional<MovieSerie> movie = movieRepo.findById(idMovie);
+        Optional<Genre> genre = repository.findById(idGenre);
+
+        if (genre.isPresent()) {
+            if (movie.isPresent()) {
+                movie.get().setGender(null);
+                genre.get().removeMovie(movie.get());
+                repository.save(genre.get());
+                return;
+            }
+            throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND, "movie not present");
+        }
+        throw new NotFoundException(ErrorType.GENRE_NOT_FOUND, "genre not found");
     }
 }

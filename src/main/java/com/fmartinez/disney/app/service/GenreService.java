@@ -12,4 +12,8 @@ public interface GenreService {
     Genre update(Genre genre, Long id);
 
     void delete(Long id);
+
+    Genre addGenreToMovie(Long idGenre, Long idMovie);
+
+    void removeGenreToMovie(Long idGenre, Long idMovie);
 }

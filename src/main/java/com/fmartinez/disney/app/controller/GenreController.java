@@ -29,4 +29,10 @@ public interface GenreController {
     @DeleteMapping("/delete/{id}")
     ResponseEntity<Void> delete(@PathVariable Long id);
 
+    @PostMapping("/add/{idGenre}/movie/{idMovie}")
+    ResponseEntity<Genre>addGenreToMovie(@PathVariable Long idGenre, @PathVariable Long idMovie);
+
+    @DeleteMapping("/remove/{idGenre}/movie/{idMovie}")
+    ResponseEntity<Void> removeGenreToMovie(@PathVariable Long idGenre, @PathVariable Long idMovie);
+
 }

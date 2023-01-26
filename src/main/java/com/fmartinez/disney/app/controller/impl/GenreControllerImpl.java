@@ -45,4 +45,16 @@ public class GenreControllerImpl implements GenreController {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @Override
+    public ResponseEntity<Genre> addGenreToMovie(@PathVariable Long idGenre, @PathVariable Long idMovie) {
+        Genre genre = service.addGenreToMovie(idGenre, idMovie);
+        return new ResponseEntity<>(genre, HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<Void> removeGenreToMovie(Long idGenre, Long idMovie) {
+        service.removeGenreToMovie(idGenre, idMovie);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -32,7 +32,7 @@ public interface MovieController {
 
     @GetMapping("/name/{name}")
     @ResponseFindMovieSerieByName
-    ResponseEntity<MovieSerieDto> getMovieByName(@RequestParam String name);
+    ResponseEntity<MovieSerieDto> getMovieByName(@PathVariable String name);
 
     @GetMapping("/genre/{idGenero}")
     @ResponseFindMovieSerieByGenre
