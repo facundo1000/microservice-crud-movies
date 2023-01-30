@@ -1,5 +1,6 @@
 package com.fmartinez.disney.app.service;
 
+import com.fmartinez.disney.app.dto.GenreDto;
 import com.fmartinez.disney.app.model.Genre;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface GenreService {
     Genre addGenreToMovie(Long idGenre, Long idMovie);
 
     void removeGenreToMovie(Long idGenre, Long idMovie);
+
+    List<GenreDto> findAllGenres(boolean isDeleted);
 }

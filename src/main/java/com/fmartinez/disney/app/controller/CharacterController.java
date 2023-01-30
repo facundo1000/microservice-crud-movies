@@ -8,6 +8,7 @@ import com.fmartinez.disney.app.swagger.find.character.*;
 import com.fmartinez.disney.app.swagger.save.character.ResponseSaveCharacter;
 import com.fmartinez.disney.app.swagger.save.character.ResponseUpdateCharacter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,11 +46,11 @@ public interface CharacterController {
 
     @PostMapping
     @ResponseSaveCharacter
-    ResponseEntity<?> create(@RequestBody Character character);
+    ResponseEntity<?> create(@Valid @RequestBody Character character);
 
     @PutMapping("/update/{id}")
     @ResponseUpdateCharacter
-    ResponseEntity<Character> update(@RequestBody Character character, @PathVariable Long id);
+    ResponseEntity<Character> update(@Valid @RequestBody Character character, @PathVariable Long id);
 
     @DeleteMapping("/delete/{id}")
     @ResponseDeleteCharacter

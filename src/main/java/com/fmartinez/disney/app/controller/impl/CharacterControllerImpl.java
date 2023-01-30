@@ -5,8 +5,10 @@ import com.fmartinez.disney.app.dto.CharacterDetailDto;
 import com.fmartinez.disney.app.dto.CharacterDto;
 import com.fmartinez.disney.app.model.Character;
 import com.fmartinez.disney.app.service.CharacterService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +37,7 @@ public class CharacterControllerImpl implements CharacterController {
     @Override
     public ResponseEntity<CharacterDetailDto> getCharacterById(@PathVariable(required = false) Long id) {
         CharacterDetailDto detailDto = service.getCharacterById(id);
+
         return new ResponseEntity<>(detailDto, HttpStatus.OK);
     }
 
@@ -64,13 +67,13 @@ public class CharacterControllerImpl implements CharacterController {
     }
 
     @Override
-    public ResponseEntity<Character> create(@RequestBody Character character) {
+    public ResponseEntity<Character> create(@Valid @RequestBody Character character) {
         Character character1 = service.create(character);
         return new ResponseEntity<>(character1, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<Character> update(@RequestBody Character character, @PathVariable Long id) {
+    public ResponseEntity<Character> update(@Valid @RequestBody Character character, @PathVariable Long id) {
         Character updateCharacter = service.update(character, id);
         return new ResponseEntity<>(updateCharacter, HttpStatus.CREATED);
     }

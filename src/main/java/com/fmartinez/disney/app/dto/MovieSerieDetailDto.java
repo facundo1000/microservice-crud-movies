@@ -32,5 +32,5 @@ public class MovieSerieDetailDto {
     @JsonProperty(required = true)
     private Set<Character> characters;
     @JsonProperty(required = true)
-    private Genre gender;
+    private GenreDto gender;
 }

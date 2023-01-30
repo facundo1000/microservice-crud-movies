@@ -13,10 +13,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.fmartinez.disney.app.util.PojoGenerator.buildGenreModel;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -51,6 +53,28 @@ public class GenreTest {
         allAssertionGenre(service.create(genre));
         verify(repository).save(any(Genre.class));
     }
+    @Test
+    @DisplayName("Test: update an existing genre")
+    void updateGenre(){
+        when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(genre));
+        when(repository.save(any(Genre.class))).thenReturn(genre);
+
+        allAssertionGenre(service.update(genre,1L));
+
+        verify(repository).findById(anyLong());
+        verify(repository).save(any(Genre.class));
+    }
+
+    @Test
+    @DisplayName("Test: delete an existing genre by id")
+    void deleteGenre() {
+        when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(genre));
+        service.delete(1L);
+
+        verify(repository).findById(anyLong());
+        verify(repository).deleteById(anyLong());
+    }
+
 
     private void allAssertionGenre(Genre genreIn) {
         assertThat(genreIn).isNotNull();

@@ -1,17 +1,23 @@
 package com.fmartinez.disney.app.service.impl;
 
+import com.fmartinez.disney.app.dto.GenreDto;
 import com.fmartinez.disney.app.exception.NotFoundException;
+import com.fmartinez.disney.app.mapper.MapStructMapper;
 import com.fmartinez.disney.app.model.Genre;
 import com.fmartinez.disney.app.model.MovieSerie;
 import com.fmartinez.disney.app.repository.GenreRepository;
 import com.fmartinez.disney.app.repository.MovieSerieRepository;
 import com.fmartinez.disney.app.service.GenreService;
 import com.fmartinez.disney.app.util.ErrorType;
+import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
+import org.hibernate.Filter;
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -19,10 +25,12 @@ public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository repository;
     private final MovieSerieRepository movieRepo;
+    private final MapStructMapper mapper;
+    private final EntityManager manager;
 
     @Override
     public List<Genre> getAllGenre() {
-        return (List<Genre>) repository.findAll();
+        return repository.findAll();
     }
 
     @Override
@@ -45,7 +53,6 @@ public class GenreServiceImpl implements GenreService {
                 return repository.save(actual.get());
             }
         }
-
         throw new NotFoundException(ErrorType.GENRE_NOT_FOUND, "Cannot be updated");
     }
 
@@ -64,7 +71,6 @@ public class GenreServiceImpl implements GenreService {
 
         Optional<MovieSerie> movie = movieRepo.findById(idMovie);
         Optional<Genre> genre = repository.findById(idGenre);
-
         if (genre.isPresent()) {
             if (movie.isPresent()) {
                 movie.get().setGender(genre.get());
@@ -92,5 +98,18 @@ public class GenreServiceImpl implements GenreService {
             throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND, "movie not present");
         }
         throw new NotFoundException(ErrorType.GENRE_NOT_FOUND, "genre not found");
+    }
+
+    @Override
+    public List<GenreDto> findAllGenres(boolean isDeleted) {
+        Session session = manager.unwrap(Session.class);
+        Filter filter = session.enableFilter("deletedGenreFilter");
+        filter.setParameter("isDeleted", isDeleted);
+        List<GenreDto> genreList = repository.findAll()
+                .stream()
+                .map(mapper::genreToGenreDto)
+                .collect(Collectors.toList());
+        session.disableFilter("deletedGenreFilter");
+        return genreList;
     }
 }

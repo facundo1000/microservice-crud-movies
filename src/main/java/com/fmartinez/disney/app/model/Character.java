@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -22,6 +24,8 @@ import java.util.Set;
 @Entity
 @Builder
 @Table(name = "CHARACTER")
+@SQLDelete(sql = "UPDATE CHARACTER SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 public class Character implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +49,8 @@ public class Character implements Serializable {
             fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<MovieSerie> movies = new HashSet<>();
+
+    private Boolean deleted = Boolean.FALSE;
 
     public void addMovieSerie(MovieSerie movie) {
         this.movies.add(movie);

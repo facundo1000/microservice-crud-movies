@@ -1,5 +1,6 @@
 package com.fmartinez.disney.app.controller;
 
+import com.fmartinez.disney.app.dto.GenreDto;
 import com.fmartinez.disney.app.model.Genre;
 import com.fmartinez.disney.app.swagger.find.genre.ResponseFindGenre;
 import com.fmartinez.disney.app.swagger.save.genre.ResponseSaveGenre;
@@ -17,20 +18,20 @@ public interface GenreController {
 
     @GetMapping
     @ResponseFindGenre
-    ResponseEntity<List<Genre>> getAllGenres();
+    ResponseEntity<List<GenreDto>> getAllGeneres(@RequestParam(defaultValue = "false", required = false) Boolean isDeleted);
 
     @PostMapping("/create")
     @ResponseSaveGenre
-    ResponseEntity<Genre> create(@RequestBody Genre genre);
+    ResponseEntity<GenreDto> create(@RequestBody Genre genre);
 
     @PutMapping("/update/{id}")
-    ResponseEntity<Genre> update(@RequestBody Genre genre, @PathVariable Long id);
+    ResponseEntity<GenreDto> update(@RequestBody Genre genre, @PathVariable Long id);
 
     @DeleteMapping("/delete/{id}")
     ResponseEntity<Void> delete(@PathVariable Long id);
 
     @PostMapping("/add/{idGenre}/movie/{idMovie}")
-    ResponseEntity<Genre>addGenreToMovie(@PathVariable Long idGenre, @PathVariable Long idMovie);
+    ResponseEntity<GenreDto> addGenreToMovie(@PathVariable Long idGenre, @PathVariable Long idMovie);
 
     @DeleteMapping("/remove/{idGenre}/movie/{idMovie}")
     ResponseEntity<Void> removeGenreToMovie(@PathVariable Long idGenre, @PathVariable Long idMovie);
