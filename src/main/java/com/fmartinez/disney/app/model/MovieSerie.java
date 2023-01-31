@@ -3,10 +3,11 @@ package com.fmartinez.disney.app.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fmartinez.disney.app.dto.GenreDto;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -23,7 +24,8 @@ import java.util.Set;
 @Entity
 @Table(name = "MOVIE_SERIE")
 @SQLDelete(sql = "UPDATE MOVIE_SERIE SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
+@FilterDef(name = "deletedMovieFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
+@Filter(name = "deletedMovieFilter", condition = "deleted = :isDeleted")
 public class MovieSerie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +51,6 @@ public class MovieSerie implements Serializable {
     @JoinColumn(name = "gender_id")
     @JsonIgnore
     private Genre gender;
-
     private Boolean deleted = Boolean.FALSE;
 
     public void addCharacter(Character character) {

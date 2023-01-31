@@ -30,7 +30,7 @@ public class MovieSerieDetailDto {
     @JsonProperty(required = true)
     private Integer rate;
     @JsonProperty(required = true)
-    private Set<Character> characters;
+    private Set<CharacterDto> characters;
     @JsonProperty(required = true)
     private GenreDto gender;
 }

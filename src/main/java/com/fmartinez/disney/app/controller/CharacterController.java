@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.fmartinez.disney.app.constant.ApplicationConstant.CHARACTER_PATH;
 
@@ -22,7 +23,7 @@ public interface CharacterController {
 
     @GetMapping
     @ResponseFindCharacter
-    ResponseEntity<List<CharacterDto>> getAllCharacters();
+    ResponseEntity<Set<CharacterDto>> getAllCharacters(@RequestParam(defaultValue = "false", required = false) Boolean isDeleted);
 
     @GetMapping(value = "/details/{id}")
     @ResponseFindCharacterDetails
@@ -46,7 +47,7 @@ public interface CharacterController {
 
     @PostMapping
     @ResponseSaveCharacter
-    ResponseEntity<?> create(@Valid @RequestBody Character character);
+    ResponseEntity<CharacterDto> create(@Valid @RequestBody Character character);
 
     @PutMapping("/update/{id}")
     @ResponseUpdateCharacter

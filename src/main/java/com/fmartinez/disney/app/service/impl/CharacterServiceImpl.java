@@ -8,7 +8,10 @@ import com.fmartinez.disney.app.model.Character;
 import com.fmartinez.disney.app.repository.CharacterRepository;
 import com.fmartinez.disney.app.service.CharacterService;
 import com.fmartinez.disney.app.util.ErrorType;
+import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
+import org.hibernate.Filter;
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,12 +27,11 @@ public class CharacterServiceImpl implements CharacterService {
     private final CharacterRepository repository;
     private final MapStructMapper mapper;
 
+    private final EntityManager manager;
+
     @Override
-    public List<CharacterDto> getAllCharacters() {
-        return repository.findAll()
-                .stream()
-                .map(mapper::characterToCharacterDto)
-                .collect(Collectors.toList());
+    public List<Character> getAllCharacters() {
+        return repository.findAll();
     }
 
 
@@ -107,33 +109,17 @@ public class CharacterServiceImpl implements CharacterService {
         repository.deleteById(id);
     }
 
-    /**
-     * Java.lang.NullPointerException: Cannot invoke "java.util.Set.forEach(java.util.function.Consumer)"
-     * because the return value of "com.fmartinez.disney.app.dto.CharacterDetailDto.getMovies()" is null
-     */
-//    private void mapDtotoEntity(CharacterDetailDto dto, Character characte) {
-//        characte.setName(dto.getName());
-//        if (characte.getMovies() == null) {
-//            characte.setMovies(new HashSet<>());
-//        }
-//        dto.getMovies().forEach(m -> {
-//            Optional<MovieSerie> movie = movieRepo.findByTitleIgnoreCase(m.getTitle());
-//            if (movie.isEmpty()) {
-//                movie = Optional.of(new MovieSerie());
-//                movie.get().setCharacters(new HashSet<>());
-//            }
-//            movie.get().setTitle(m.getTitle());
-//            characte.addMovieSerie(movie.get());
-//        });
-//    }
-    private CharacterDetailDto mapEntityToDto(Character character) {
-        CharacterDetailDto characterDto = new CharacterDetailDto();
-        characterDto.setImage(character.getImage());
-        characterDto.setName(character.getName());
-        characterDto.setAge(character.getAge());
-        characterDto.setWeight(character.getWeight());
-        characterDto.setStory(character.getStory());
-        characterDto.setMovies(character.getMovies());
-        return characterDto;
+    @Override
+    public Set<CharacterDto> getAllCharactersFiltered(boolean isDeleted) {
+        Session session = manager.unwrap(Session.class);
+        Filter filter = session.enableFilter("deletedCharacterFilter");
+        filter.setParameter("isDeleted", isDeleted);
+        Set<CharacterDto> characterDtoSet = repository.findAll()
+                .stream()
+                .map(mapper::characterToCharacterDto)
+                .collect(Collectors.toSet());
+        session.disableFilter("deletedCharacterFilter");
+        return characterDtoSet;
+
     }
 }

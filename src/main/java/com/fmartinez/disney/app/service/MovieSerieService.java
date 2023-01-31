@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface MovieSerieService {
 
-    List<MovieSerieDto> getAllMovies();
+    List<MovieSerie> getAllMovies();
 
     MovieSerieDetailDto getMovieSerieDetail(Long id);
 
@@ -30,5 +30,6 @@ public interface MovieSerieService {
 
     void deleteCharacterFromMovie(Long idMovie, Long idCharacter);
 
+    Set<MovieSerieDto> getAllMoviesFilter(Boolean isDeleted);
 
 }

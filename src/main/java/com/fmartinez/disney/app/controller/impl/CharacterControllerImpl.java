@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -27,9 +28,9 @@ public class CharacterControllerImpl implements CharacterController {
     }
 
     @Override
-    public ResponseEntity<List<CharacterDto>> getAllCharacters() {
+    public ResponseEntity<Set<CharacterDto>> getAllCharacters(@RequestParam(defaultValue = "false", required = false) Boolean isDeleted) {
 
-        List<CharacterDto> dtoList = service.getAllCharacters();
+        Set<CharacterDto> dtoList = service.getAllCharactersFiltered(isDeleted);
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
@@ -67,9 +68,10 @@ public class CharacterControllerImpl implements CharacterController {
     }
 
     @Override
-    public ResponseEntity<Character> create(@Valid @RequestBody Character character) {
+    public ResponseEntity<CharacterDto> create(@Valid @RequestBody Character character) {
         Character character1 = service.create(character);
-        return new ResponseEntity<>(character1, HttpStatus.CREATED);
+        CharacterDto dto = new CharacterDto(character1.getImage(), character1.getName());
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     @Override

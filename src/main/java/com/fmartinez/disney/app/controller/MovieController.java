@@ -24,15 +24,15 @@ public interface MovieController {
 
     @GetMapping
     @ResponseFindMovieSerie
-    ResponseEntity<List<MovieSerieDto>> getAllMovies();
+    ResponseEntity<Set<MovieSerieDto>> getAllMovies(@RequestParam(defaultValue = "false", required = false) Boolean isDeleted);
 
     @GetMapping("/details/{id}")
     @ResponseFindMovieSerieDetails
     ResponseEntity<MovieSerieDetailDto> getMovieDetail(@PathVariable Long id);
 
-    @GetMapping("/name/{name}")
+    @GetMapping("/name/{title}")
     @ResponseFindMovieSerieByName
-    ResponseEntity<MovieSerieDto> getMovieByName(@PathVariable String name);
+    ResponseEntity<MovieSerieDto> getMovieByName(@PathVariable String title);
 
     @GetMapping("/genre/{idGenero}")
     @ResponseFindMovieSerieByGenre
@@ -44,11 +44,11 @@ public interface MovieController {
 
     @PostMapping("/create")
     @ResponseSaveMovieSerie
-    ResponseEntity<MovieSerie> createMovie(@RequestBody MovieSerie movieSerie);
+    ResponseEntity<MovieSerieDto> createMovie(@RequestBody MovieSerie movieSerie);
 
     @PutMapping("/update/{id}")
     @ResponseUpdateMovieSerie
-    ResponseEntity<MovieSerie> updateMovie(@RequestBody MovieSerie movieSerie, @PathVariable Long id);
+    ResponseEntity<MovieSerieDto> updateMovie(@RequestBody MovieSerie movieSerie, @PathVariable Long id);
 
     @DeleteMapping("/delete/{id}")
     @ResponseDeleteMovieSerie
@@ -56,7 +56,7 @@ public interface MovieController {
 
     @PostMapping("/{idMovie}/characters/{idCharacter}")
     @ResponseSaveMovieSerieCharcter
-    ResponseEntity<MovieSerie> addCharacterToMovie(@PathVariable Long idMovie, @PathVariable Long idCharacter);
+    ResponseEntity<MovieSerieDetailDto> addCharacterToMovie(@PathVariable Long idMovie, @PathVariable Long idCharacter);
 
     @DeleteMapping("/{idMovie}/characters/{idCharacter}")
     @ResponseDeleteMovieSerieCharacter

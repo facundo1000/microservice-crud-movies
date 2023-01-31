@@ -1,5 +1,6 @@
 package com.fmartinez.disney.app.service.impl;
 
+import com.fmartinez.disney.app.dto.CharacterDetailDto;
 import com.fmartinez.disney.app.dto.MovieSerieDetailDto;
 import com.fmartinez.disney.app.dto.MovieSerieDto;
 import com.fmartinez.disney.app.exception.NotFoundException;
@@ -10,11 +11,15 @@ import com.fmartinez.disney.app.repository.CharacterRepository;
 import com.fmartinez.disney.app.repository.MovieSerieRepository;
 import com.fmartinez.disney.app.service.MovieSerieService;
 import com.fmartinez.disney.app.util.ErrorType;
+import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
+import org.hibernate.Filter;
+import org.hibernate.Session;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,18 +31,18 @@ public class MovieSerieImpl implements MovieSerieService {
     private final CharacterRepository characterRepository;
     private final MovieSerieRepository repository;
     private final MapStructMapper mapper;
+    private final EntityManager manager;
 
     @Override
-    public List<MovieSerieDto> getAllMovies() {
-        return repository.findAll().stream()
-                .map(mapper::movieSerieToMovieSerieDto)
-                .collect(Collectors.toList());
+    public List<MovieSerie> getAllMovies() {
+        return repository.findAll();
     }
 
     @Override
     public MovieSerieDetailDto getMovieSerieDetail(Long id) {
         return repository
-                .findById(id).map(mapper::movieSerieDetail)
+                .findById(id)
+                .map(mapper::movieSerieDetail)
                 .orElseThrow(() -> new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND));
     }
 
@@ -155,6 +160,19 @@ public class MovieSerieImpl implements MovieSerieService {
         } else {
             throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND);
         }
+    }
+
+    @Override
+    public Set<MovieSerieDto> getAllMoviesFilter(Boolean isDeleted) {
+        Session session = manager.unwrap(Session.class);
+        Filter filter = session.enableFilter("deletedMovieFilter");
+        filter.setParameter("isDeleted", isDeleted);
+        Set<MovieSerieDto> movieList = repository.findAll()
+                .stream()
+                .map(mapper::movieSerieToMovieSerieDto)
+                .collect(Collectors.toSet());
+        session.disableFilter("deletedMovieFilter");
+        return movieList;
     }
 
 }

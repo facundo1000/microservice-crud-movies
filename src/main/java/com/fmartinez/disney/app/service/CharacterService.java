@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface CharacterService {
-    List<CharacterDto> getAllCharacters();
+    List<Character> getAllCharacters();
 
     CharacterDetailDto getCharacterById(Long id);
 
@@ -25,4 +25,6 @@ public interface CharacterService {
     Character update(Character character, Long id);
 
     void deleteCharcter(Long id);
+
+    Set<CharacterDto> getAllCharactersFiltered(boolean isDeleted);
 }

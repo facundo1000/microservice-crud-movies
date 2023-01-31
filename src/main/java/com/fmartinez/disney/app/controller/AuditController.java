@@ -1,11 +1,11 @@
 package com.fmartinez.disney.app.controller;
 
-import com.fmartinez.disney.app.dto.GenreDto;
 import com.fmartinez.disney.app.model.Character;
 import com.fmartinez.disney.app.model.Genre;
 import com.fmartinez.disney.app.model.MovieSerie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 

@@ -2,13 +2,14 @@ package com.fmartinez.disney.app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -25,13 +26,13 @@ import java.util.Set;
 @Builder
 @Table(name = "CHARACTER")
 @SQLDelete(sql = "UPDATE CHARACTER SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
+@FilterDef(name = "deletedCharacterFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
+@Filter(name = "deletedCharacterFilter", condition = "deleted = :isDeleted")
 public class Character implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
-
     @NotEmpty(message = "Image cannot be empty")
     private String image;
     @NotEmpty(message = "name cannot be empty")
