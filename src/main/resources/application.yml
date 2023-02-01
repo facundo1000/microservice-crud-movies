@@ -29,7 +29,6 @@ springdoc:
     path: /openapi/docs
     enabled: true
 
-
 logging:
   level:
     sql: debug
