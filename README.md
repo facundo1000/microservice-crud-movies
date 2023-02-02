@@ -3,11 +3,15 @@ Microservice for the managment of characters, movies and genres. For Java Spring
 
 ## What's included
 This Java microservice uses the folowing dependencies:
-- H2 database 
+- Spring Validation
+- Spring Data JPA
+- Spring Web
+- H2 database
+- Lombock
 - MapStruct
 - Junit5 / Mokito
-- Springboot Validation
-- Lombok
+- SendGrid
+- Swagger/OpenApi
 
 ## FAQ
 **How can i access to H2 Database if needed?**
