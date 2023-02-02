@@ -54,4 +54,13 @@ public class OpenApiConfig {
                 .pathsToMatch(paths)
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi auditApi() {
+        String[] paths = {AUDIT_PATH + "/**"};
+        return GroupedOpenApi.builder()
+                .group("Audit")
+                .pathsToMatch(paths)
+                .build();
+    }
 }

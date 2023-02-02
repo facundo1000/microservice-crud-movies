@@ -2,6 +2,7 @@ package com.fmartinez.disney.app.controller;
 
 import com.fmartinez.disney.app.dto.GenreDto;
 import com.fmartinez.disney.app.model.Genre;
+import com.fmartinez.disney.app.swagger.delete.ResponseDeleteGenre;
 import com.fmartinez.disney.app.swagger.find.genre.ResponseFindGenre;
 import com.fmartinez.disney.app.swagger.save.genre.ResponseSaveGenre;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,12 +26,15 @@ public interface GenreController {
     ResponseEntity<GenreDto> create(@RequestBody Genre genre);
 
     @PutMapping("/update/{id}")
+    @ResponseSaveGenre
     ResponseEntity<GenreDto> update(@RequestBody Genre genre, @PathVariable Long id);
 
     @DeleteMapping("/delete/{id}")
+    @ResponseDeleteGenre
     ResponseEntity<Void> delete(@PathVariable Long id);
 
     @PostMapping("/add/{idGenre}/movie/{idMovie}")
+    @ResponseSaveGenre
     ResponseEntity<GenreDto> addGenreToMovie(@PathVariable Long idGenre, @PathVariable Long idMovie);
 
     @DeleteMapping("/remove/{idGenre}/movie/{idMovie}")

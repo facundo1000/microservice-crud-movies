@@ -1,7 +1,6 @@
-package com.fmartinez.disney.app.swagger.find.movie;
+package com.fmartinez.disney.app.swagger.find.character;
 
-import com.fmartinez.disney.app.dto.CharacterDto;
-import com.fmartinez.disney.app.dto.MovieSerieDto;
+import com.fmartinez.disney.app.model.Character;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,17 +16,17 @@ import static java.lang.annotation.ElementType.*;
 @Target({ANNOTATION_TYPE, METHOD, TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 
-@Operation(summary = "Get movies")
+@Operation(summary = "Get characters")
 @ApiResponses({
         @ApiResponse(responseCode = "200",
-                description = "Found all movie-series",
+                description = "Found all characters",
                 content = {
                         @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = MovieSerieDto.class))
+                                schema = @Schema(implementation = Character.class))
                 }),
         @ApiResponse(responseCode = "404", description = "Character Not Found")
 
 })
-public @interface ResponseFindMovieSerie {
+public @interface ResponseFindCharacterAudit {
 
 }

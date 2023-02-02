@@ -1,7 +1,7 @@
-package com.fmartinez.disney.app.swagger.find.movie;
+package com.fmartinez.disney.app.swagger.delete;
 
 import com.fmartinez.disney.app.dto.CharacterDto;
-import com.fmartinez.disney.app.dto.MovieSerieDto;
+import com.fmartinez.disney.app.model.Genre;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,17 +17,17 @@ import static java.lang.annotation.ElementType.*;
 @Target({ANNOTATION_TYPE, METHOD, TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 
-@Operation(summary = "Get movies")
+@Operation(summary = "Delete Genre")
 @ApiResponses({
-        @ApiResponse(responseCode = "200",
-                description = "Found all movie-series",
+        @ApiResponse(responseCode = "204",
+                description = "Delete an existing genre by id",
                 content = {
                         @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = MovieSerieDto.class))
+                                schema = @Schema(implementation = Genre.class))
                 }),
-        @ApiResponse(responseCode = "404", description = "Character Not Found")
+        @ApiResponse(responseCode = "404", description = "Genre Not Found")
 
 })
-public @interface ResponseFindMovieSerie {
+public @interface ResponseDeleteGenre {
 
 }

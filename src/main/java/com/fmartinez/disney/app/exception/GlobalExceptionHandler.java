@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.Objects;
 
 import static com.fmartinez.disney.app.constant.ApplicationConstant.*;
+import static com.fmartinez.disney.app.util.ErrorType.NOT_FOUND_EXCEPTION;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -20,18 +21,21 @@ public class GlobalExceptionHandler {
 
         return switch (exception.getErrorDefinition()) {
             case CHARACTER_NOT_FOUND -> Error.builder()
-                    .code("CHARACTER_NOT_FOUND")
                     .message(CHARACTER_NOT_FOUND + getAdditionalInfo(exception))
+                    .code("CHARACTER_NOT_FOUND")
                     .build();
             case GENRE_NOT_FOUND -> Error.builder()
-                    .code("GENRE_NOT_FOUND")
                     .message(GENRE_NOT_FOUND + getAdditionalInfo(exception))
+                    .code("GENRE_NOT_FOUND")
                     .build();
             case MOVIE_SERIE_NOT_FOUND -> Error.builder()
-                    .code("MOVIE_SERIE_NOT_FOUND")
                     .message(MOVIE_SERIE_NOT_FOUND + getAdditionalInfo(exception))
+                    .code("MOVIE_SERIE_NOT_FOUND")
                     .build();
-            case NOT_FOUND_EXCEPTION -> null;
+            default -> Error.builder()
+                    .message(NOT_FOUND_EXCEPTION + getAdditionalInfo(exception))
+                    .code("NOT_FOUND_EXCEPTION")
+                    .build();
         };
     }
 

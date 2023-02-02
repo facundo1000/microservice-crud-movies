@@ -6,6 +6,7 @@ import com.fmartinez.disney.app.dto.CharacterDto;
 import com.fmartinez.disney.app.model.Character;
 import com.fmartinez.disney.app.service.CharacterService;
 import jakarta.validation.Valid;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -14,14 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 public class CharacterControllerImpl implements CharacterController {
-
     private final CharacterService service;
-
 
     public CharacterControllerImpl(final CharacterService service) {
         this.service = service;
@@ -29,16 +27,13 @@ public class CharacterControllerImpl implements CharacterController {
 
     @Override
     public ResponseEntity<Set<CharacterDto>> getAllCharacters(@RequestParam(defaultValue = "false", required = false) Boolean isDeleted) {
-
         Set<CharacterDto> dtoList = service.getAllCharactersFiltered(isDeleted);
-
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<CharacterDetailDto> getCharacterById(@PathVariable(required = false) Long id) {
-        CharacterDetailDto detailDto = service.getCharacterById(id);
-
+        CharacterDetailDto detailDto =   service.getCharacterById(id);
         return new ResponseEntity<>(detailDto, HttpStatus.OK);
     }
 

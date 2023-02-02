@@ -77,9 +77,9 @@ public class GenreServiceImpl implements GenreService {
                 genre.get().addMovieSerie(movie.get());
                 return repository.save(genre.get());
             }
-            throw new NotFoundException(ErrorType.GENRE_NOT_FOUND, "genre not found");
+            throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND, "movie not found");
         }
-        throw new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND, "movie not present");
+        throw new NotFoundException(ErrorType.GENRE_NOT_FOUND, "genre not found");
 
     }
 
