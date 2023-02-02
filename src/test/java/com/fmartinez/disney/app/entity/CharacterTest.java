@@ -32,7 +32,8 @@ class CharacterTest {
             new Date(),
             2,
             new HashSet<>(),
-            new Genre(1L, "Drama", "descriptive image of the genre", Set.of(movieSerie)));
+            new Genre(1L, "Drama", "descriptive image of the genre", Set.of(movieSerie),Boolean.FALSE),
+            Boolean.FALSE);
 
     @Test
     @DisplayName("Test: add movie to movieSet")

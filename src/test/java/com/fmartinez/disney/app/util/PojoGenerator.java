@@ -1,9 +1,6 @@
 package com.fmartinez.disney.app.util;
 
-import com.fmartinez.disney.app.dto.CharacterDetailDto;
-import com.fmartinez.disney.app.dto.CharacterDto;
-import com.fmartinez.disney.app.dto.MovieSerieDetailDto;
-import com.fmartinez.disney.app.dto.MovieSerieDto;
+import com.fmartinez.disney.app.dto.*;
 import com.fmartinez.disney.app.model.Character;
 import com.fmartinez.disney.app.model.Genre;
 import com.fmartinez.disney.app.model.MovieSerie;
@@ -11,7 +8,6 @@ import com.fmartinez.disney.app.model.MovieSerie;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-
 
 public class PojoGenerator {
     public static MovieSerie buildMovieModel() {
@@ -23,6 +19,7 @@ public class PojoGenerator {
                 .rate(3)
                 .characters(new HashSet<>())
                 .gender(new Genre())
+                .deleted(Boolean.FALSE)
                 .build();
     }
 
@@ -35,6 +32,7 @@ public class PojoGenerator {
                 .weight(20.33)
                 .story("This is a Story")
                 .movies(new HashSet<>())
+                .deleted(Boolean.FALSE)
                 .build();
     }
 
@@ -44,6 +42,14 @@ public class PojoGenerator {
                 .image("Some genre image")
                 .name("Horror")
                 .movies(new HashSet<>())
+                .deleted(Boolean.FALSE)
+                .build();
+    }
+
+    public static GenreDto buildGenreDto() {
+        return GenreDto.builder()
+                .image("Image of the genre")
+                .name("Comedy")
                 .build();
     }
 
@@ -81,7 +87,7 @@ public class PojoGenerator {
                 .rate(4)
                 .createAt(new Date())
                 .characters(new HashSet<>())
-                .gender(new Genre())
+                .gender(new GenreDto())
                 .build();
     }
 
@@ -93,6 +99,6 @@ public class PojoGenerator {
                         new Date(),
                         4,
                         new HashSet<>(),
-                        new Genre()));
+                        new Genre(), Boolean.FALSE));
     }
 }

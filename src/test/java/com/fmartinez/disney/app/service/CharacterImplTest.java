@@ -60,7 +60,7 @@ public class CharacterImplTest {
         when(repository.findAll()).thenReturn(List.of(character));
         when(mapper.characterToCharacterDto(character)).thenReturn(characterDto);
 
-        allAssertionsForTestDto(service.getAllCharacters().iterator().next());
+        allAssertionsForTestDto(service.getAllCharactersFiltered(anyBoolean()).iterator().next());
 
         verify(repository).findAll();
         verify(mapper).characterToCharacterDto(any(Character.class));

@@ -51,7 +51,7 @@ public interface CharacterController {
 
     @PutMapping("/update/{id}")
     @ResponseUpdateCharacter
-    ResponseEntity<Character> update(@Valid @RequestBody Character character, @PathVariable Long id);
+    ResponseEntity<CharacterDto> update(@Valid @RequestBody Character character, @PathVariable Long id);
 
     @DeleteMapping("/delete/{id}")
     @ResponseDeleteCharacter

@@ -8,6 +8,8 @@ import com.fmartinez.disney.app.model.MovieSerie;
 import com.fmartinez.disney.app.repository.CharacterRepository;
 import com.fmartinez.disney.app.repository.MovieSerieRepository;
 import com.fmartinez.disney.app.service.impl.MovieSerieImpl;
+import jakarta.persistence.EntityManager;
+import org.h2.engine.Session;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,7 +66,7 @@ public class MovieSerieImpTest {
         when(movieRepository.findAll()).thenReturn(listOfMovies());
         when(mapper.movieSerieToMovieSerieDto(any(MovieSerie.class))).thenReturn(expectedResponse);
 
-        allAssertionsForTest(movieService.getAllMovies().iterator().next());
+        allAssertionsForTest(movieService.getAllMoviesFilter(anyBoolean()).iterator().next());
 
         verify(movieRepository).findAll();
     }
@@ -101,6 +103,7 @@ public class MovieSerieImpTest {
         allAssertionsForTest(movieService.findeMovieSerieByGenderId(1L).iterator().next());
 
         verify(movieRepository).findByGenderId(anyLong());
+        verify(mapper).movieSerieToMovieSerieDto(any(MovieSerie.class));
     }
 
     @Test

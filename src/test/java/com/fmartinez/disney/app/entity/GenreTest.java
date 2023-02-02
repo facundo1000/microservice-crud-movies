@@ -29,7 +29,8 @@ public class GenreTest {
             new Date(),
             2,
             new HashSet<>(),
-            new Genre(1L, "Drama", "descriptive image of the genre", new HashSet<>()));
+            new Genre(1L, "Drama", "descriptive image of the genre", new HashSet<>(),Boolean.FALSE),
+            Boolean.FALSE);
 
     @Test
     @DisplayName("Test: add a genre to a movie")

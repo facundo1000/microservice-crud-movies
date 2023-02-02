@@ -30,7 +30,8 @@ public class MovieSeriesTest {
             20,
             45.65,
             "the story of Indiana Jones",
-            new HashSet<>());
+            new HashSet<>(),
+            Boolean.FALSE);
 
     @Test
     @DisplayName("Test: add a characters to the set")
