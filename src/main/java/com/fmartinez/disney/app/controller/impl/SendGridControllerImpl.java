@@ -1,7 +1,8 @@
 package com.fmartinez.disney.app.controller.impl;
 
 import com.fmartinez.disney.app.controller.SendGridController;
-import com.fmartinez.disney.app.mail.SendGridService;
+import com.fmartinez.disney.app.mail.MailService;
+import com.fmartinez.disney.app.mail.SendGridServiceImp;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import java.io.IOException;
 @AllArgsConstructor
 public class SendGridControllerImpl implements SendGridController {
 
-    private final SendGridService service;
+    private final MailService service;
 
     @Override
     public ResponseEntity<?> getMailInfo() {

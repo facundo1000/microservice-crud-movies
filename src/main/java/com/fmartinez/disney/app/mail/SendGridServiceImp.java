@@ -19,13 +19,14 @@ import static com.fmartinez.disney.app.constant.ApplicationConstant.MAIL_SUBJECT
 
 @Service
 @Slf4j
-public class SendGridService {
+public class SendGridServiceImp implements MailService {
     private final SendGridAPI sendGrid;
 
-    public SendGridService(SendGridAPI sendGrid) {
+    public SendGridServiceImp(SendGridAPI sendGrid) {
         this.sendGrid = sendGrid;
     }
 
+    @Override
     public Map<String, String> getMailInfo() {
         Map<String, String> response = new HashMap<>();
 
@@ -36,6 +37,7 @@ public class SendGridService {
     }
 
 
+    @Override
     public String sendPlainText(String reciver) throws IOException {
         Mail mail = getMail(reciver);
 
@@ -51,6 +53,7 @@ public class SendGridService {
         return request.getBody();
 
     }
+
 
     private static Mail getMail(String reciver) {
         Email from = new Email(MAIL_SENDER, "Stardust.Cia");
