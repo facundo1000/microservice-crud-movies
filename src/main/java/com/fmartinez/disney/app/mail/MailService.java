@@ -6,5 +6,7 @@ import java.util.Map;
 public interface MailService {
     Map<String, String> getMailInfo();
 
-    String sendPlainText(String reciver) throws IOException;
+    void sendPlainText(String reciver) throws IOException;
+
+    void sendTemplateMail(String email) throws IOException;
 }

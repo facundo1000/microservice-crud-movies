@@ -12,6 +12,9 @@ public interface SendGridController {
     @GetMapping("/email/info")
     ResponseEntity<?> getMailInfo();
 
-    @PostMapping("/email/{email}")
-    ResponseEntity<String> sendText(@PathVariable String email) throws IOException;
+    @PostMapping("/email/text/{email}")
+    ResponseEntity<?> sendText(@PathVariable String email) throws IOException;
+
+    @PostMapping("/email/template/{email}")
+    ResponseEntity<?> sendMailTemplate(@PathVariable String email) throws IOException;
 }
