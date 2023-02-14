@@ -6,6 +6,7 @@ import com.fmartinez.disney.app.dto.MovieSerieDetailDto;
 import com.fmartinez.disney.app.dto.MovieSerieDto;
 import com.fmartinez.disney.app.exception.NotFoundException;
 import com.fmartinez.disney.app.mapper.MapStructMapper;
+import com.fmartinez.disney.app.model.Character;
 import com.fmartinez.disney.app.model.MovieSerie;
 import com.fmartinez.disney.app.service.MovieSerieService;
 import com.fmartinez.disney.app.util.ErrorType;
@@ -17,10 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,38 +38,18 @@ public class MovieSerieControllerImpl implements MovieController {
 
     @Override
     public ResponseEntity<MovieSerieDetailDto> getMovieDetail(@PathVariable Long id) {
-        Optional<MovieSerieDetailDto> movieSerie = service.getAllMovies()
-                .stream()
-                .filter(m -> m.getDeleted().equals(Boolean.FALSE) && Objects.equals(m.getId(), id))
-                .map(mapper::movieSerieDetail)
-                .findAny();
-
-        return movieSerie.map(m -> new ResponseEntity<>(m, HttpStatus.OK))
-                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_EXCEPTION));
+        return new ResponseEntity<>(service.getMovieSerieDetail(id), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<MovieSerieDto> getMovieByName(@PathVariable String title) {
-        Optional<MovieSerieDto> serieDto = service.getAllMovies()
-                .stream()
-                .filter(m -> m.getDeleted() == Boolean.FALSE && m.getTitle().equalsIgnoreCase(title))
-                .map(mapper::movieSerieToMovieSerieDto)
-                .findAny();
-
-        return serieDto.map(movie ->
-                        new ResponseEntity<>(movie, HttpStatus.OK))
-                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_EXCEPTION));
+        return new ResponseEntity<>(service.getByTitle(title), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Set<MovieSerieDto>> getMovieByGenderId(@PathVariable Long idGenero) {
 
-        Set<MovieSerieDto> serieDto = service.getAllMovies()
-                .stream()
-                .filter(m -> m.getGender() != null)
-                .filter(m -> m.getDeleted() == Boolean.FALSE && Objects.equals(m.getGender().getId(), idGenero))
-                .map(mapper::movieSerieToMovieSerieDto)
-                .collect(Collectors.toSet());
+        Set<MovieSerieDto> serieDto = service.findeMovieSerieByGenderId(idGenero);
 
         if (serieDto.isEmpty()) {
             throw new NotFoundException(ErrorType.NOT_FOUND_EXCEPTION);
@@ -105,17 +85,12 @@ public class MovieSerieControllerImpl implements MovieController {
 
 
     @Override
-    public ResponseEntity<MovieSerieDetailDto> addCharacterToMovie(@PathVariable Long idMovie, @PathVariable Long idCharacter) {
+    public ResponseEntity<?> addCharacterToMovie(@PathVariable Long idMovie, @PathVariable Long idCharacter) {
         MovieSerie ms = service.addCharacterToMovie(idMovie, idCharacter);
 
-        MovieSerieDetailDto dto = new MovieSerieDetailDto(ms.getImage(),
-                ms.getTitle(),
-                ms.getCreateAt(),
-                ms.getRate(),
-                ms.getCharacters().stream().map(mapper::characterToCharacterDto).collect(Collectors.toSet()),
-                new GenreDto(ms.getGender().getName(), ms.getGender().getImage()));
+        Map<String, String> response = getResponse(idCharacter, ms);
 
-        return new ResponseEntity<>(dto, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @Override
@@ -125,6 +100,21 @@ public class MovieSerieControllerImpl implements MovieController {
             service.deleteCharacterFromMovie(idMovie, idCharacter);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private static Map<String, String> getResponse(Long idCharacter, MovieSerie ms) {
+        Map<String, String> response = new HashMap<>();
+        String characterName = ms.getCharacters()
+                .stream()
+                .filter(m -> Objects.equals(m.getId(), idCharacter))
+                .map(Character::getName)
+                .findFirst()
+                .get();
+
+        response.put("Movie: ", ms.getTitle());
+        response.put("Character added: ", characterName);
+        response.put("Date: ", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        return response;
     }
 
 }

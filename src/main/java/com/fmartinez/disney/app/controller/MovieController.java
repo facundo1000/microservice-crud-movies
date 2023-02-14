@@ -56,7 +56,7 @@ public interface MovieController {
 
     @PostMapping("/{idMovie}/characters/{idCharacter}")
     @ResponseSaveMovieSerieCharcter
-    ResponseEntity<MovieSerieDetailDto> addCharacterToMovie(@PathVariable Long idMovie, @PathVariable Long idCharacter);
+    ResponseEntity<?> addCharacterToMovie(@PathVariable Long idMovie, @PathVariable Long idCharacter);
 
     @DeleteMapping("/{idMovie}/characters/{idCharacter}")
     @ResponseDeleteMovieSerieCharacter
