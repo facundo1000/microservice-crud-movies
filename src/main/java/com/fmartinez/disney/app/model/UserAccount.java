@@ -1,10 +1,11 @@
 package com.fmartinez.disney.app.model;
 
+import com.fmartinez.disney.app.util.Rol;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.util.List;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -19,14 +20,15 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank(message = "Username cannot be blank")
-    private String username;
+    @Email
+    private String email;
     @NotBlank(message = "Password cannot be blank")
     private String password;
     private Boolean enable;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private List<Role> roles;
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
+
 
     @PrePersist
     public void prePersist() {
