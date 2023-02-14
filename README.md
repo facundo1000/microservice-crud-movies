@@ -8,6 +8,7 @@ This Java microservice uses the folowing dependencies:
 - Spring Web
 - H2 database
 - Lombock
+- Spring Security with JWT
 - MapStruct
 - Junit5 / Mokito
 - SendGrid
