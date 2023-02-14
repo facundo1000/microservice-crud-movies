@@ -5,6 +5,7 @@ import com.fmartinez.disney.app.model.Character;
 import com.fmartinez.disney.app.model.Genre;
 import com.fmartinez.disney.app.model.MovieSerie;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
