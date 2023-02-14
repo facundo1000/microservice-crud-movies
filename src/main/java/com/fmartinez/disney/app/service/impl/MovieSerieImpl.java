@@ -1,6 +1,5 @@
 package com.fmartinez.disney.app.service.impl;
 
-import com.fmartinez.disney.app.dto.CharacterDetailDto;
 import com.fmartinez.disney.app.dto.MovieSerieDetailDto;
 import com.fmartinez.disney.app.dto.MovieSerieDto;
 import com.fmartinez.disney.app.exception.NotFoundException;
@@ -18,10 +17,7 @@ import org.hibernate.Session;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,26 +36,33 @@ public class MovieSerieImpl implements MovieSerieService {
 
     @Override
     public MovieSerieDetailDto getMovieSerieDetail(Long id) {
-        return repository
-                .findById(id)
+        return repository.findById(id)
+                .filter(m -> m.getDeleted().equals(Boolean.FALSE) && Objects.equals(m.getId(), id))
                 .map(mapper::movieSerieDetail)
                 .orElseThrow(() -> new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND));
+
     }
 
     @Override
     public MovieSerieDto getByTitle(String name) {
         return repository.findByTitleIgnoreCase(name)
+                .filter(m -> m.getDeleted().equals(Boolean.FALSE))
                 .map(mapper::movieSerieToMovieSerieDto)
                 .orElseThrow(() -> new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND));
+
     }
 
     @Override
     public Set<MovieSerieDto> findeMovieSerieByGenderId(Long id) {
-        return repository.findByGenderId(id)
-                .orElseThrow(() -> new NotFoundException(ErrorType.MOVIE_SERIE_NOT_FOUND))
-                .stream()
-                .map(mapper::movieSerieToMovieSerieDto)
-                .collect(Collectors.toSet());
+        if (id > 0) {
+            return repository.findByGenderId(id)
+                    .stream()
+                    .flatMap(Collection::stream)
+                    .filter(m -> m.getDeleted().equals(Boolean.FALSE))
+                    .map(mapper::movieSerieToMovieSerieDto)
+                    .collect(Collectors.toSet());
+        }
+        throw new NotFoundException(ErrorType.GENRE_NOT_FOUND, "Genre id " + id + " not found");
     }
 
     @Override
@@ -72,18 +75,21 @@ public class MovieSerieImpl implements MovieSerieService {
                 case "ASC", "asc" -> repository
                         .findAll(Sort.by("createAt").ascending())
                         .stream()
+                        .filter(m -> m.getDeleted() == Boolean.FALSE)
                         .map(mapper::movieSerieToMovieSerieDto)
                         .toList();
 
                 case "DESC", "desc" -> repository
                         .findAll(Sort.by("createAt").descending())
                         .stream()
+                        .filter(m -> m.getDeleted() == Boolean.FALSE)
                         .map(mapper::movieSerieToMovieSerieDto)
                         .toList();
 
                 default -> repository
                         .findAll(Sort.by("createAt").descending())
                         .stream()
+                        .filter(m -> m.getDeleted() == Boolean.FALSE)
                         .map(mapper::movieSerieToMovieSerieDto)
                         .toList();
             };
