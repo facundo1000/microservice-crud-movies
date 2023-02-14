@@ -3,21 +3,24 @@ package com.fmartinez.disney.app.controller.impl;
 import com.fmartinez.disney.app.controller.AuthController;
 import com.fmartinez.disney.app.dto.AuthenticationResponse;
 import com.fmartinez.disney.app.dto.LoginRegisterRequest;
+import com.fmartinez.disney.app.mail.MailService;
 import com.fmartinez.disney.app.security.auth.AuthenticationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
+@RequiredArgsConstructor
 public class AuthControllerImpl implements AuthController {
 
     private final AuthenticationService service;
-
-    public AuthControllerImpl(AuthenticationService service) {
-        this.service = service;
-    }
+    private final MailService mailService;
 
     @Override
-    public ResponseEntity<AuthenticationResponse> register(LoginRegisterRequest request) throws InstantiationException, IllegalAccessException {
+    public ResponseEntity<AuthenticationResponse> register(LoginRegisterRequest request) throws InstantiationException, IllegalAccessException, IOException {
+        mailService.sendTemplateMail(request.getEmail());
         return ResponseEntity.ok(service.register(request));
     }
 

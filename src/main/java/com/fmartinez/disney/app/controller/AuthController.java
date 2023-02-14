@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.IOException;
+
 @RequestMapping("/api/auth")
 public interface AuthController {
 
     @PostMapping("/register")
-    ResponseEntity<AuthenticationResponse> register(@RequestBody LoginRegisterRequest request) throws InstantiationException, IllegalAccessException;
+    ResponseEntity<AuthenticationResponse> register(@RequestBody LoginRegisterRequest request) throws InstantiationException, IllegalAccessException, IOException;
 
     @PostMapping("/login")
     ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRegisterRequest request);
