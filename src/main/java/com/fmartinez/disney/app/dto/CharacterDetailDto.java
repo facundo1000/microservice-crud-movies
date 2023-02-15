@@ -24,5 +24,5 @@ public class CharacterDetailDto {
     private Double weight;
     @JsonProperty(required = true)
     private String story;
-    private Set<MovieSerie> movies;
+    private Set<MovieSerieDto> movies;
 }

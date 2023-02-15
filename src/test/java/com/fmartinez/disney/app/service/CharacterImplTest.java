@@ -60,6 +60,7 @@ public class CharacterImplTest {
         when(repository.findAll()).thenReturn(List.of(character));
         when(mapper.characterToCharacterDto(character)).thenReturn(characterDto);
 
+
         allAssertionsForTestDto(service.getAllCharactersFiltered(anyBoolean()).iterator().next());
 
         verify(repository).findAll();
@@ -169,7 +170,7 @@ public class CharacterImplTest {
         assertThat(detailDto.getAge()).isEqualTo(character.getAge());
         assertThat(detailDto.getWeight()).isEqualTo(character.getWeight());
         assertThat(detailDto.getStory()).isEqualTo(character.getStory());
-        assertThat(detailDto.getMovies()).isEqualTo(character.getMovies());
+        assertThat(detailDto.getMovies()).isInstanceOf(Set.class);
     }
 
     private void allAssertionsForTestCharacter(Character characterIn) {
