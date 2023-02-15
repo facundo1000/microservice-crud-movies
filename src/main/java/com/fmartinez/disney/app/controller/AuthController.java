@@ -13,7 +13,7 @@ import java.io.IOException;
 public interface AuthController {
 
     @PostMapping("/register")
-    ResponseEntity<AuthenticationResponse> register(@RequestBody LoginRegisterRequest request) throws InstantiationException, IllegalAccessException, IOException;
+    ResponseEntity<AuthenticationResponse> register(@RequestBody LoginRegisterRequest email) throws InstantiationException, IllegalAccessException, IOException;
 
     @PostMapping("/login")
     ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRegisterRequest request);

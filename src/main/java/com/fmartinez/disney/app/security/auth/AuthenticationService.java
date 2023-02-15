@@ -25,10 +25,10 @@ public class AuthenticationService {
     private final AuthenticationManager manager;
     private final UserDetailsService userDetailsService;
 
-    public AuthenticationResponse register(LoginRegisterRequest register) throws InstantiationException, IllegalAccessException {
+    public AuthenticationResponse register(LoginRegisterRequest email) {
         UserAccount user = UserAccount.builder()
-                .email(register.getEmail())
-                .password(encoder.encode(register.getPassword()))
+                .email(email.getEmail())
+                .password(encoder.encode(email.getPassword()))
                 .rol(USER)
                 .build();
         repository.save(user);
@@ -40,9 +40,13 @@ public class AuthenticationService {
 
     public AuthenticationResponse login(LoginRegisterRequest login) {
         manager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
+
         UserAccount userAccount = repository.findByEmail(login.getEmail()).orElseThrow();
+
         UserDetails details = userDetailsService.loadUserByUsername(userAccount.getEmail());
+
         String token = jwtService.createToken(details);
+
         return AuthenticationResponse.builder().token(token).build();
     }
 

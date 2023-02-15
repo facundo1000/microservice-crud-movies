@@ -19,9 +19,9 @@ public class AuthControllerImpl implements AuthController {
     private final MailService mailService;
 
     @Override
-    public ResponseEntity<AuthenticationResponse> register(LoginRegisterRequest request) throws InstantiationException, IllegalAccessException, IOException {
-        mailService.sendTemplateMail(request.getEmail());
-        return ResponseEntity.ok(service.register(request));
+    public ResponseEntity<AuthenticationResponse> register(LoginRegisterRequest email) throws IOException {
+        mailService.sendTemplateMail(email.getEmail());
+        return ResponseEntity.ok(service.register(email));
     }
 
     @Override

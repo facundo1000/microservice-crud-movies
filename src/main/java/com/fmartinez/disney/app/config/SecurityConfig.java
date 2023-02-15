@@ -4,7 +4,6 @@ import com.fmartinez.disney.app.security.JwtAuthenticationFilter;
 import com.fmartinez.disney.app.security.handler.AppAccessDeniedHandler;
 import com.fmartinez.disney.app.security.handler.AppAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,7 +28,7 @@ public class SecurityConfig {
     private final AppAuthenticationEntryPoint entryPoint;
     private final AppAccessDeniedHandler deniedHandler;
     private final String[] patterns = {"/api/characters/**", "/api/genre/**", "/api/characters/**"};
-    private final String[] dataBaseDoc = {"/", "/h2/**", "/openapi/**"};
+    private final String[] dataBaseDoc = {"/", "/h2", "/h2/**", "/openapi/**"};
 
 
     @Bean
@@ -56,7 +55,7 @@ public class SecurityConfig {
                 .and()
                 .exceptionHandling().accessDeniedHandler(deniedHandler);
 
-        http.headers().frameOptions().sameOrigin();
+        http.headers().frameOptions().disable();
 
         return http.build();
     }
