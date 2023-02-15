@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.security.SignatureException;
 
 import static com.fmartinez.disney.app.constant.ApplicationConstant.AUTH_HEADER;
 

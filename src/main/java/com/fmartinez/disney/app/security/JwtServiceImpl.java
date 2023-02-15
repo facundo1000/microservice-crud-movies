@@ -11,8 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.fmartinez.disney.app.constant.ApplicationConstant.SECRET_KEY;
-import static com.fmartinez.disney.app.constant.ApplicationConstant.TOKEN_PREFIX;
+import static com.fmartinez.disney.app.constant.ApplicationConstant.*;
 
 @Service
 public class JwtServiceImpl implements JwtService {
@@ -28,7 +27,7 @@ public class JwtServiceImpl implements JwtService {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + TOKE_EXPIRATION))
                 .signWith(SECRET_KEY)
                 .compact();
     }

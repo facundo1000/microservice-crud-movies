@@ -18,6 +18,7 @@ public class ApplicationConstant {
     public static final String AUTH_HEADER = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer";
     public static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    public static final Long TOKE_EXPIRATION = 86400000L;
 
 }
 
