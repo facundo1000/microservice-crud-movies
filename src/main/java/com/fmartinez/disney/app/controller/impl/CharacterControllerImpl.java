@@ -21,6 +21,8 @@ import java.util.*;
 public class CharacterControllerImpl implements CharacterController {
     private final CharacterService service;
 
+
+
     public CharacterControllerImpl(final CharacterService service) {
         this.service = service;
     }
@@ -31,6 +33,7 @@ public class CharacterControllerImpl implements CharacterController {
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
+    //TODO: quitar los atributos booleanos cuando se busca un character
     @Override
     public ResponseEntity<CharacterDetailDto> getCharacterById(@PathVariable(required = false) Long id) {
         CharacterDetailDto detailDto =   service.getCharacterById(id);
