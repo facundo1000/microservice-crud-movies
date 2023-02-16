@@ -3,13 +3,12 @@ package com.fmartinez.disney.app.config;
 import com.fmartinez.disney.app.security.JwtAuthenticationFilter;
 import com.fmartinez.disney.app.security.handler.AppAccessDeniedHandler;
 import com.fmartinez.disney.app.security.handler.AppAuthenticationEntryPoint;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,20 +21,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class SecurityConfig {
     private final UserDetailsService service;
     private final JwtAuthenticationFilter jwtFilter;
     private final AppAuthenticationEntryPoint entryPoint;
     private final AppAccessDeniedHandler deniedHandler;
-    private final String[] patterns = {"/api/characters/**", "/api/genre/**", "/api/characters/**"};
-    private final String[] dataBaseDoc = {"/", "/h2-console", "/h2", "/h2-console/**", "/h2/**", "/openapi/**"};
+    private final String[] dataBaseDoc = {"/", "/h2/**", "/openapi/**"};
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.ignoringRequestMatchers("/", "/h2", "/h2/**"))
+        http
                 .authorizeHttpRequests()
                 .requestMatchers(dataBaseDoc)
                 .permitAll()
@@ -46,7 +44,10 @@ public class SecurityConfig {
                 .anyRequest()
                 .authenticated();
 
-        http.sessionManagement()
+        http
+                .csrf()
+                .disable()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(provider(passwordEncoder(), service))
@@ -55,7 +56,7 @@ public class SecurityConfig {
                 .and()
                 .exceptionHandling().accessDeniedHandler(deniedHandler);
 
-        http.headers().frameOptions().sameOrigin();
+        http.headers().frameOptions().disable();
 
         return http.build();
     }
