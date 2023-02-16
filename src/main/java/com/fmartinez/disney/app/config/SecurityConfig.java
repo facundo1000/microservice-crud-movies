@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,19 +29,18 @@ public class SecurityConfig {
     private final AppAuthenticationEntryPoint entryPoint;
     private final AppAccessDeniedHandler deniedHandler;
     private final String[] patterns = {"/api/characters/**", "/api/genre/**", "/api/characters/**"};
-    private final String[] dataBaseDoc = {"/", "/h2", "/h2/**", "/openapi/**"};
+    private final String[] dataBaseDoc = {"/", "/h2-console", "/h2", "/h2-console/**", "/h2/**", "/openapi/**"};
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.cors()
-                .and()
-                .csrf()
-                .disable()
+        http.csrf(csrf -> csrf.ignoringRequestMatchers("/", "/h2", "/h2/**"))
                 .authorizeHttpRequests()
                 .requestMatchers(dataBaseDoc)
                 .permitAll()
+                .and()
+                .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**")
                 .permitAll()
                 .anyRequest()
@@ -55,7 +55,7 @@ public class SecurityConfig {
                 .and()
                 .exceptionHandling().accessDeniedHandler(deniedHandler);
 
-        http.headers().frameOptions().disable();
+        http.headers().frameOptions().sameOrigin();
 
         return http.build();
     }
