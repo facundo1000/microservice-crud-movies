@@ -1,5 +1,6 @@
-# microservice-disney
-Microservice for the managment of characters, movies and genres. For Java Springboot functional demostration purposes only. May need to expand functionality over time
+# microservice-crud-movies
+Microservice for the managment of characters, movies and genres. 
+For Java Springboot functional demostration purposes only. May need to expand functionality over time.
 
 ## What's included
 This Java microservice uses the folowing dependencies:
